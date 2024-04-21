@@ -1,0 +1,14 @@
+{% extends "_base.html" %} 
+
+{% block title %}
+    Home
+{% endblock title %}
+
+{% block content %}
+    <h1>This is our home page !!</h1>
+    {% if user.is_authenticated %}
+        <h3>Go to <a href="">Channels List</a> !!</h3>
+    {% else %}
+        <h2>You are not logged in !!</h2>
+    {% endif %}
+{% endblock content %}
