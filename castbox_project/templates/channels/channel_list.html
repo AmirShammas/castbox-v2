@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block title %}
+    Channel-List
+{% endblock title %}
+
+{% block content %}
+    {% for channel in channel_list %}
+        <div>
+            <h2><a href="">{{ channel.id }}</a> => {{ channel.title }} => {{ channel.description }} => {{ channel.owner }}</h2>
+            <hr/>
+        </div>
+    {% endfor %}
+{% endblock content %}

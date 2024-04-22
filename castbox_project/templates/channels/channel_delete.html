@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <h1>Delete Phone</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h2>Are you sure you want to delete "{{ phone.first_name }} {{ phone.last_name }}" ?</h2>
+        <input type="submit" value="CONFIRM">
+    </form>
+    <h4><a href="{% url 'phone_detail' phone.pk %}">CANCEL</a></h4>
+{% endblock content %}
