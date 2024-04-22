@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView
@@ -32,5 +33,7 @@ class EpisodeListView(LoginRequiredMixin, ListView):
     login_url = "login"
 
     def get_queryset(self):
-        return Episode.objects.all()
+        channel_id = self.kwargs.get('channel_id')
+        channel = get_object_or_404(Channel, id=channel_id)
+        return Episode.objects.filter(channel=channel)
 
