@@ -8,6 +8,7 @@
     {% for channel in channel_list %}
         <div>
             <h2><a href="">{{ channel.id }}</a> => {{ channel.title }} => {{ channel.description }} => {{ channel.owner }}</h2>
+            <h2>Go to <a href="{% url 'episode_list' %}">episodes</a> !!</h2>
             <hr/>
         </div>
     {% endfor %}

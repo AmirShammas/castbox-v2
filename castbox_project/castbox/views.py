@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView
-from .models import Channel
+from .models import Channel, Episode
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -24,4 +24,13 @@ class ChannelListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Channel.objects.all()
+
+class EpisodeListView(LoginRequiredMixin, ListView):
+    model = Episode
+    context_object_name = "episode_list"
+    template_name = "episodes/episode_list.html"
+    login_url = "login"
+
+    def get_queryset(self):
+        return Episode.objects.all()
 
