@@ -27,6 +27,13 @@ class ChannelListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Channel.objects.all()
+    
+class ChannelDetailView(LoginRequiredMixin, DetailView):
+    model = Channel
+    context_object_name = "channel"
+    template_name = "channels/channel_detail.html"
+    login_url = "login"
+
 
 class EpisodeListView(LoginRequiredMixin, ListView):
     model = Episode

@@ -7,7 +7,7 @@
 {% block content %}
     {% for channel in channel_list %}
         <div>
-            <h2><a href="">{{ channel.id }}</a> => {{ channel.title }} => {{ channel.description }} => {{ channel.owner }}</h2>
+            <h2><a href="{% url 'channel_detail' channel.pk %}">{{ channel.id }}</a> => {{ channel.title }} => {{ channel.description }} => {{ channel.owner }}</h2>
             <h2>Go to <a href="{% url 'episode_list' channel.id %}">episodes</a> !!</h2>
             <h2>Write a <a href="{% url 'comment_new' channel.id %}">comment</a> !!</h2>
             <h3>Comments:</h3>

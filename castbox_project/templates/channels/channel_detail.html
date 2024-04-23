@@ -1,42 +1,28 @@
 {% extends "_base.html" %}
 
 {% block title %}
-    Phone-Details
+    Channel-Details
 {% endblock title %}
 
 {% block content %}
-    {% if user.is_superuser %}
+    <div>
+        <h2>id : {{ channel.id }}</h2>
+        <h2>title : {{ channel.title }}</h2>
+        <h2>description : {{ channel.description }}</h2>
+        <h2>owner : {{ channel.owner }}</h2>
+    </div>
+    <hr/>
+    <h2>comments :</h2>
+    {% for comment in channel.comments.all %}
         <div>
-            <h2>id: {{ phone.id }}</h2>
-            <h2>author: {{ phone.author }}</h2>
-            <h2>first_name: {{ phone.first_name }}</h2>
-            <h2>last_name: {{ phone.last_name }}</h2>
-            <h2>mobile: {{ phone.mobile }}</h2>
-            <h2>city: {{ phone.city }}</h2>
-            <h2>is_active: {{ phone.is_active }}</h2>
-            <hr/>
-            <h3><a href="{% url 'phone_edit' phone.pk %}">EDIT</a></h3>
-            <hr/>
-            <h3><a href="{% url 'phone_delete' phone.pk %}">DELETE</a></h3>
-            <hr/>
-            <h3>Back to <a href="{% url 'phone_list' %}">Phone List</a> !!</h3>
+            <h3><a href="">{{ comment.id }}</a> => {{ comment.title }} => {{ comment.description }}</h3>
         </div>
-    {% else %}
-        {% if phone.is_active %}
-            <div>
-                <h2>id: {{ phone.id }}</h2>
-                <h2>first_name: {{ phone.first_name }}</h2>
-                <h2>last_name: {{ phone.last_name }}</h2>
-                <h2>mobile: {{ phone.mobile }}</h2>
-                <h2>city: {{ phone.city }}</h2>
-                <hr/>
-                <h3><a href="{% url 'phone_edit' phone.pk %}">EDIT</a></h3>
-                <hr/>
-                <h3>Back to <a href="{% url 'phone_list' %}">Phone List</a> !!</h3>
-            </div>
-        {% endif %}
-        {% if not phone.is_active %}
-            <h1>Access Denied !! Back to <a href="{% url 'home' %}">home</a> page !!</h1>
-        {% endif %}
-    {% endif %}
+    {% endfor %}
+    <hr/>
+    <h2>episodes :</h2>
+    {% for episode in channel.episodes.all %}
+        <div>
+            <h3><a href="">{{ episode.id }}</a> => {{ episode.title }} => {{ episode.description }}</h3>
+        </div>
+    {% endfor %}
 {% endblock content %}
