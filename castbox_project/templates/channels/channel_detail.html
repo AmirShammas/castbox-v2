@@ -15,9 +15,10 @@
     <h2>comments :</h2>
     {% for comment in channel.comments.all %}
         <div>
-            <h3><a href="">{{ comment.id }}</a> => {{ comment.title }} => {{ comment.description }}</h3>
+            <h3><a href="">{{ comment.id }}</a> => {{ comment.title }} => {{ comment.description }} => {{ comment.author }}</h3>
         </div>
     {% endfor %}
+    <h2>Write a new <a href="{% url 'comment_new' channel.id %}">comment</a> for this channel !!</h2>
     <hr/>
     <h2>episodes :</h2>
     {% for episode in channel.episodes.all %}

@@ -64,15 +64,16 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         profile.comment.add(form.instance)
 
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        channel_id = self.kwargs.get('channel_id')
+        return reverse('channel_detail', kwargs={'pk': channel_id})
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'profiles/profile.html'
     context_object_name = 'profile'
-
-    # def get_object(self, queryset=None):
-    #     return self.request.user.profile
     
     def get_object(self, queryset=None):
         user_id = self.kwargs.get('user_id')
