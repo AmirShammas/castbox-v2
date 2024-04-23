@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Channel, Episode, Comment
+from .models import Channel, CustomUser, Episode, Comment, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -51,5 +51,14 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         channel = get_object_or_404(Channel, id=channel_id)
         form.instance.channel = channel
         return super().form_valid(form)
+
+
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'profiles/profile.html'
+    context_object_name = 'profile'
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
 
 

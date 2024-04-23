@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from abc import abstractmethod
 from django.conf import settings
 from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class CustomUser(AbstractUser):
@@ -10,6 +12,12 @@ class CustomUser(AbstractUser):
         verbose_name = "CustomUser"
         verbose_name_plural = "CustomUsers"
         ordering = ("id",)
+
+   
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(owner=instance)
 
 
 class MyBaseModel(models.Model):
@@ -82,4 +90,20 @@ class Comment(MyBaseModel):
 
     def get_absolute_url(self):
         return reverse("channel_list")
+
+
+class Profile(MyBaseModel):
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="profile", verbose_name="Owner")
+    channel = models.ManyToManyField(Channel, null=True, blank=True, related_name="profiles", verbose_name="Channels")
+    episode = models.ManyToManyField(Episode, null=True, blank=True, related_name="profiles", verbose_name="Episodes")
+    comment = models.ManyToManyField(Comment, null=True, blank=True, related_name="profiles", verbose_name="Comments")
+
+    class Meta:
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
+        ordering = ("id",)
+
+    def __str__(self):
+        return str(self.id)
+
 
