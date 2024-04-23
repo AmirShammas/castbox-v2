@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView
-from .models import Channel, Episode
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Channel, Episode, Comment
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -36,4 +37,19 @@ class EpisodeListView(LoginRequiredMixin, ListView):
         channel_id = self.kwargs.get('channel_id')
         channel = get_object_or_404(Channel, id=channel_id)
         return Episode.objects.filter(channel=channel)
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    context_object_name = "comment"
+    template_name = "comments/comment_new.html"
+    fields = ["title", "description"]
+    login_url = "login"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        channel_id = self.kwargs.get('channel_id')
+        channel = get_object_or_404(Channel, id=channel_id)
+        form.instance.channel = channel
+        return super().form_valid(form)
+
 
