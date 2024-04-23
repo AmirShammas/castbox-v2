@@ -91,3 +91,19 @@ class ChannelCreateView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
+class ChannelUpdateView(LoginRequiredMixin, UpdateView):
+    model = Channel
+    context_object_name = "channel"
+    template_name = "channels/channel_edit.html"
+    fields = ["title", "description"]
+    login_url = "login"
+
+    def get_success_url(self):
+        return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        form.save()
+
+        return super().form_valid(form)
+
