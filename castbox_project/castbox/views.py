@@ -50,6 +50,11 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         channel_id = self.kwargs.get('channel_id')
         channel = get_object_or_404(Channel, id=channel_id)
         form.instance.channel = channel
+        form.save()
+
+        profile = Profile.objects.get(owner=self.request.user)
+        profile.comment.add(form.instance)
+
         return super().form_valid(form)
 
 

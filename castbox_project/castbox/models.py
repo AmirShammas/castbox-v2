@@ -106,4 +106,6 @@ class Profile(MyBaseModel):
     def __str__(self):
         return str(self.id)
 
+    def get_comments(self):
+        return self.comment.all()
 

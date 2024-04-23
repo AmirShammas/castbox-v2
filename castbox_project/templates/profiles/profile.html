@@ -6,4 +6,10 @@
 
 {% block content %}
     <h3>id: {{ profile.id }}</h3>
+    <h3>Comments:</h3>
+    <ul>
+        {% for comment in profile.get_comments %}
+            <li>{{ comment.id }} => {{ comment.title }}</li>
+        {% endfor %}
+    </ul>
 {% endblock content %}
