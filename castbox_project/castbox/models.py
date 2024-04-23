@@ -109,3 +109,6 @@ class Profile(MyBaseModel):
     def get_comments(self):
         return self.comment.all()
 
+    def get_channels(self):
+        return self.channel.all()
+
