@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Channel, CustomUser, Episode, Comment, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 
 
 class SignupPageView(generic.CreateView):
@@ -63,7 +64,30 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     template_name = 'profiles/profile.html'
     context_object_name = 'profile'
 
+    # def get_object(self, queryset=None):
+    #     return self.request.user.profile
+    
     def get_object(self, queryset=None):
-        return self.request.user.profile
+        user_id = self.kwargs.get('user_id')
+        return get_object_or_404(Profile, owner_id=user_id)
 
+
+class ChannelCreateView(LoginRequiredMixin, CreateView):
+    model = Channel
+    context_object_name = "channel"
+    template_name = "channels/channel_new.html"
+    fields = ["title", "description"]
+    login_url = "login"
+
+    def get_success_url(self):
+        return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        form.save()
+
+        profile = Profile.objects.get(owner=self.request.user)
+        profile.channel.add(form.instance)
+
+        return super().form_valid(form)
 
