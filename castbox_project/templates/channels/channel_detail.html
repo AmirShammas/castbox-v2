@@ -6,13 +6,13 @@
 
 {% block content %}
     <div>
-        <h2>id : {{ channel.id }}</h2>
-        <h2>title : {{ channel.title }}</h2>
-        <h2>description : {{ channel.description }}</h2>
-        <h2>owner : {{ channel.owner }}</h2>
+        <h2>channel_id : {{ channel.id }}</h2>
+        <h2>channel_title : {{ channel.title }}</h2>
+        <h2>channel_description : {{ channel.description }}</h2>
+        <h2>channel_owner : {{ channel.owner }}</h2>
     </div>
     <hr/>
-    <h2>comments :</h2>
+    <h2>channel_comments :</h2>
     {% for comment in channel.comments.all %}
         <div>
             <h3><a href="">{{ comment.id }}</a> => {{ comment.title }} => {{ comment.description }} => {{ comment.author }}</h3>
@@ -20,7 +20,7 @@
     {% endfor %}
     <h2>Write a new <a href="{% url 'comment_new' channel.id %}">comment</a> for this channel !!</h2>
     <hr/>
-    <h2>episodes :</h2>
+    <h2>channel_episodes :</h2>
     {% for episode in channel.episodes.all %}
         <div>
             <h3><a href="">{{ episode.id }}</a> => {{ episode.title }} => {{ episode.description }}</h3>
