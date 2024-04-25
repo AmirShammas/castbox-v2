@@ -168,9 +168,14 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
     fields = ["title", "description"]
     login_url = "login"
 
+    # def get_success_url(self):
+    #     return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
+    
     def get_success_url(self):
-        return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
-
+        channel_id = self.kwargs.get('channel_id')
+        episode_id = self.kwargs.get('pk')
+        return reverse_lazy('profile_episode_detail', kwargs={'channel_id': channel_id, 'pk': episode_id})
+    
     def form_valid(self, form):
         form.instance.owner = self.request.user
         form.save()
