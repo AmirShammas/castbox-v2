@@ -15,8 +15,8 @@
     <h3>My Channels :</h3>
     <ul>
         {% for channel in profile.get_channels %}
-            <li><a href="{% url 'profile_channel_detail' channel.pk %}">{{ channel.id }}</a> => {{ channel.title }} => <a href="{% url 'channel_edit' channel.pk %}">Update</a> this Channel   OR  Create new <a href="">Episode</a> !!</li>
+            <li><a href="{% url 'profile_channel_detail' channel.pk %}">{{ channel.id }}</a> => {{ channel.title }} => {{ channel.description }}</li>
         {% endfor %}
     </ul>
-    <h3>Create new <a href="{% url 'channel_new' %}">Channel</a> !!</h3>
+    <h3>Create new <a href="{% url 'profile_channel_new' %}">Channel</a> !!</h3>
 {% endblock content %}

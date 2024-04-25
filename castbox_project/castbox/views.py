@@ -86,10 +86,10 @@ class ProfileChannelDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'channel'
 
 
-class ChannelCreateView(LoginRequiredMixin, CreateView):
+class ProfileChannelCreateView(LoginRequiredMixin, CreateView):
     model = Channel
     context_object_name = "channel"
-    template_name = "channels/channel_new.html"
+    template_name = "profiles/profile_channel_new.html"
     fields = ["title", "description"]
     login_url = "login"
 
@@ -105,7 +105,7 @@ class ChannelCreateView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
-class ChannelUpdateView(LoginRequiredMixin, UpdateView):
+class ProfileChannelUpdateView(LoginRequiredMixin, UpdateView):
     model = Channel
     context_object_name = "channel"
     template_name = "channels/channel_edit.html"
