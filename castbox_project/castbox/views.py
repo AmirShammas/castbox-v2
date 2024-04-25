@@ -90,7 +90,8 @@ class ProfileChannelCreateView(LoginRequiredMixin, CreateView):
     login_url = "login"
 
     def get_success_url(self):
-        return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
+        profile_id = self.kwargs.get('profile_id')
+        return reverse_lazy('profile', kwargs={'pk': profile_id})
 
     def form_valid(self, form):
         form.instance.owner = self.request.user

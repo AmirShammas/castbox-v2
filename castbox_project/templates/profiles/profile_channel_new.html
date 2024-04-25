@@ -7,5 +7,5 @@
         {{ form.as_p }}
         <input type="submit" value="SAVE">
     </form>
-    <h4><a href="{% url 'profile' user_id=request.user.id %}">CANCEL</a></h4>
+    <h4><a href="{% url 'profile' user.profile.id %}">CANCEL</a></h4>
 {% endblock content %}

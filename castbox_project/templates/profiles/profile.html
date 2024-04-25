@@ -18,5 +18,5 @@
             <li><a href="{% url 'profile_channel_detail' user.profile.id channel.pk %}">{{ channel.id }}</a> => {{ channel.title }} => {{ channel.description }}</li>
         {% endfor %}
     </ul>
-    <h3>Create new <a href="{% url 'profile_channel_new' %}">Channel</a> !!</h3>
+    <h3>Create new <a href="{% url 'profile_channel_new' user.profile.id %}">Channel</a> !!</h3>
 {% endblock content %}
