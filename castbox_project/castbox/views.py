@@ -108,7 +108,7 @@ class ProfileChannelCreateView(LoginRequiredMixin, CreateView):
 class ProfileChannelUpdateView(LoginRequiredMixin, UpdateView):
     model = Channel
     context_object_name = "channel"
-    template_name = "channels/channel_edit.html"
+    template_name = "profiles/profile_channel_edit.html"
     fields = ["title", "description"]
     login_url = "login"
 
