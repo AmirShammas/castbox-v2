@@ -11,6 +11,7 @@
         <h2>channel_description : {{ channel.description }}</h2>
         <h2>channel_owner : {{ channel.owner }}</h2>
     </div>
+    <hr/>
     <h2><a href="{% url 'profile_channel_edit' channel.id %}">Update</a> this channel !!</h2>
     <h2><a href="{% url 'profile_channel_delete' channel.id %}">Delete</a> this channel !!</h2>
     <hr/>
@@ -20,7 +21,6 @@
             <h3>{{ comment.id }} => {{ comment.title }} => {{ comment.description }} => {{ comment.author }}</h3>
         </div>
     {% endfor %}
-    <h2>Write a new <a href="{% url 'comment_new' channel.id %}">comment</a> for this channel !!</h2>
     <hr/>
     <h2>channel_episodes :</h2>
     {% for episode in channel.episodes.all %}
@@ -28,4 +28,5 @@
             <h3><a href="">{{ episode.id }}</a> => {{ episode.title }} => {{ episode.description }}</h3>
         </div>
     {% endfor %}
+    <h2>Create a new <a href="{% url 'profile_episode_new' channel.id %}">episode</a> for this channel !!</h2>
 {% endblock content %}

@@ -131,3 +131,26 @@ class ProfileChannelDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
 
 
+class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
+    model = Episode
+    context_object_name = "episode"
+    template_name = "profiles/profile_episode_new.html"
+    fields = ["title", "description"]
+    login_url = "login"
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        channel_id = self.kwargs.get('channel_id')
+        channel = get_object_or_404(Channel, id=channel_id)
+        form.instance.channel = channel
+        form.save()
+
+        profile = Profile.objects.get(owner=self.request.user)
+        profile.episode.add(form.instance)
+
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        channel_id = self.kwargs.get('channel_id')
+        return reverse('profile_channel_detail', kwargs={'pk': channel_id})
+
