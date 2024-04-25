@@ -174,6 +174,5 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         form.save()
-
         return super().form_valid(form)
 
