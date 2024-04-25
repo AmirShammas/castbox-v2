@@ -82,7 +82,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
 class ProfileChannelDetailView(LoginRequiredMixin, DetailView):
     model = Channel
-    template_name = 'profiles/profile_channel_details.html'
+    template_name = 'profiles/profile_channel_detail.html'
     context_object_name = 'channel'
 
 
@@ -153,4 +153,10 @@ class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         channel_id = self.kwargs.get('channel_id')
         return reverse('profile_channel_detail', kwargs={'pk': channel_id})
+
+
+class ProfileEpisodeDetailView(LoginRequiredMixin, DetailView):
+    model = Episode
+    template_name = 'profiles/profile_episode_detail.html'
+    context_object_name = 'episode'
 
