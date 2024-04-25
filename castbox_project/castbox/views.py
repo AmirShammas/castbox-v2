@@ -121,3 +121,13 @@ class ProfileChannelUpdateView(LoginRequiredMixin, UpdateView):
 
         return super().form_valid(form)
 
+
+class ProfileChannelDeleteView(LoginRequiredMixin, DeleteView):
+    model = Channel
+    context_object_name = "channel"
+    template_name = "profiles/profile_channel_delete.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
+
+

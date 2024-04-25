@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
+from .views import ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
 
 urlpatterns = [
     path("accounts/signup/", SignupPageView.as_view(), name="signup"),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('profile/channel/<int:pk>/', ProfileChannelDetailView.as_view(), name='profile_channel_detail'),
     path("profile/channel/new/", ProfileChannelCreateView.as_view(), name="profile_channel_new"),
     path("profile/channel/<int:pk>/edit/", ProfileChannelUpdateView.as_view(), name="profile_channel_edit"),
+    path("profile/channel/<int:pk>/delete/", ProfileChannelDeleteView.as_view(), name="profile_channel_delete"),
 ]
