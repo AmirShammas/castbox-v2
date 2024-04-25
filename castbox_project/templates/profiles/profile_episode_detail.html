@@ -13,5 +13,5 @@
     </div>
     <hr/>
     <h2><a href="{% url 'profile_episode_edit' episode.channel.id episode.pk %}">Update</a> this episode !!</h2>
-    <h2><a href="">Delete</a> this episode !!</h2>
+    <h2><a href="{% url 'profile_episode_delete' episode.channel.id episode.pk %}">Delete</a> this episode !!</h2>
 {% endblock content %}

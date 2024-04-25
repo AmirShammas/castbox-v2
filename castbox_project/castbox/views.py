@@ -167,9 +167,6 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "profiles/profile_episode_edit.html"
     fields = ["title", "description"]
     login_url = "login"
-
-    # def get_success_url(self):
-    #     return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
     
     def get_success_url(self):
         channel_id = self.kwargs.get('channel_id')
@@ -180,4 +177,13 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
         form.instance.owner = self.request.user
         form.save()
         return super().form_valid(form)
+
+class ProfileEpisodeDeleteView(LoginRequiredMixin, DeleteView):
+    model = Episode
+    context_object_name = "episode"
+    template_name = "profiles/profile_episode_delete.html"
+    
+    def get_success_url(self):
+        channel_id = self.kwargs.get('channel_id')
+        return reverse('profile_channel_detail', kwargs={'pk': channel_id})
 
