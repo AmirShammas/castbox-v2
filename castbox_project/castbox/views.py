@@ -63,7 +63,10 @@ class EpisodeLikeView(LoginRequiredMixin, View):
         if Like.objects.filter(user=user, channel=channel, episode=episode).exists():
             return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
         
-        Like.objects.create(user=user, channel=channel, episode=episode)
+        new_like = Like.objects.create(user=user, channel=channel, episode=episode)
+
+        profile = Profile.objects.get(owner=self.request.user)
+        profile.like.add(new_like)
         
         return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
 
