@@ -7,5 +7,5 @@
         <h2>Are you sure you want to delete "{{ channel.title }}" ?</h2>
         <input type="submit" value="CONFIRM">
     </form>
-    <h4><a href="{% url 'profile_channel_detail' channel.pk %}">CANCEL</a></h4>
+    <h4><a href="{% url 'profile_channel_detail' user.profile.id channel.pk %}">CANCEL</a></h4>
 {% endblock content %}
