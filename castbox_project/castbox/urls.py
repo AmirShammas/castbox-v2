@@ -13,8 +13,8 @@ urlpatterns = [
     path("profile/<int:profile_id>/channel/new/", ProfileChannelCreateView.as_view(), name="profile_channel_new"),
     path("profile/<int:profile_id>/channel/<int:pk>/edit/", ProfileChannelUpdateView.as_view(), name="profile_channel_edit"),
     path("profile/<int:profile_id>/channel/<int:pk>/delete/", ProfileChannelDeleteView.as_view(), name="profile_channel_delete"),
-    path("profile/channel/<int:channel_id>/episode/new/", ProfileEpisodeCreateView.as_view(), name="profile_episode_new"),
-    path("profile/channel/<int:channel_id>/episode/<int:pk>/", ProfileEpisodeDetailView.as_view(), name="profile_episode_detail"),
-    path("profile/channel/<int:channel_id>/episode/<int:pk>/edit/", ProfileEpisodeUpdateView.as_view(), name="profile_episode_edit"),
-    path("profile/channel/<int:channel_id>/episode/<int:pk>/delete/", ProfileEpisodeDeleteView.as_view(), name="profile_episode_delete"),
+    path("profile/<int:profile_id>/channel/<int:channel_id>/episode/new/", ProfileEpisodeCreateView.as_view(), name="profile_episode_new"),
+    path("profile/<int:profile_id>/channel/<int:channel_id>/episode/<int:pk>/", ProfileEpisodeDetailView.as_view(), name="profile_episode_detail"),
+    path("profile/<int:profile_id>/channel/<int:channel_id>/episode/<int:pk>/edit/", ProfileEpisodeUpdateView.as_view(), name="profile_episode_edit"),
+    path("profile/<int:profile_id>/channel/<int:channel_id>/episode/<int:pk>/delete/", ProfileEpisodeDeleteView.as_view(), name="profile_episode_delete"),
 ]

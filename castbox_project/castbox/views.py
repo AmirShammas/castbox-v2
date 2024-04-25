@@ -150,8 +150,9 @@ class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
     
     def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
         channel_id = self.kwargs.get('channel_id')
-        return reverse('profile_channel_detail', kwargs={'pk': channel_id})
+        return reverse('profile_channel_detail', kwargs={'profile_id': profile_id, 'pk': channel_id})
 
 
 class ProfileEpisodeDetailView(LoginRequiredMixin, DetailView):
@@ -168,9 +169,10 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
     login_url = "login"
     
     def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
         channel_id = self.kwargs.get('channel_id')
         episode_id = self.kwargs.get('pk')
-        return reverse_lazy('profile_episode_detail', kwargs={'channel_id': channel_id, 'pk': episode_id})
+        return reverse_lazy('profile_episode_detail', kwargs={'profile_id': profile_id, 'channel_id': channel_id, 'pk': episode_id})
     
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -183,6 +185,7 @@ class ProfileEpisodeDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "profiles/profile_episode_delete.html"
     
     def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
         channel_id = self.kwargs.get('channel_id')
-        return reverse('profile_channel_detail', kwargs={'pk': channel_id})
+        return reverse('profile_channel_detail', kwargs={'profile_id': profile_id, 'pk': channel_id})
 

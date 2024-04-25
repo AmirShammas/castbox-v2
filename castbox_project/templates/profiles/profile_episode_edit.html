@@ -7,4 +7,5 @@
             {{ form.as_p }}
             <input type="submit" value="UPDATE">
         </form>
+        <h4><a href="{% url 'profile_episode_detail' user.profile.id episode.channel.pk episode.id %}">CANCEL</a></h4>
 {% endblock content %}
