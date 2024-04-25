@@ -160,3 +160,20 @@ class ProfileEpisodeDetailView(LoginRequiredMixin, DetailView):
     template_name = 'profiles/profile_episode_detail.html'
     context_object_name = 'episode'
 
+
+class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
+    model = Episode
+    context_object_name = "episode"
+    template_name = "profiles/profile_episode_edit.html"
+    fields = ["title", "description"]
+    login_url = "login"
+
+    def get_success_url(self):
+        return reverse_lazy('profile', kwargs={'user_id': self.request.user.id})
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        form.save()
+
+        return super().form_valid(form)
+
