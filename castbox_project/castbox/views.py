@@ -80,6 +80,12 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         return get_object_or_404(Profile, owner_id=user_id)
 
 
+class ProfileChannelDetailView(LoginRequiredMixin, DetailView):
+    model = Channel
+    template_name = 'profiles/profile_channel_details.html'
+    context_object_name = 'channel'
+
+
 class ChannelCreateView(LoginRequiredMixin, CreateView):
     model = Channel
     context_object_name = "channel"

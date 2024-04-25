@@ -9,13 +9,13 @@
     <h3>My Comments :</h3>
     <ul>
         {% for comment in profile.get_comments %}
-            <li>{{ comment.id }} => {{ comment.title }}</li>
+            <li>{{ comment.id }} => {{ comment.title }} => {{ comment.description }} => {{ comment.channel }}</li>
         {% endfor %}
     </ul>
     <h3>My Channels :</h3>
     <ul>
         {% for channel in profile.get_channels %}
-            <li>{{ channel.id }} => {{ channel.title }} => <a href="{% url 'channel_edit' channel.pk %}">Update</a> this Channel   OR  Create new <a href="">Episode</a> !!</li>
+            <li><a href="{% url 'profile_channel_detail' channel.pk %}">{{ channel.id }}</a> => {{ channel.title }} => <a href="{% url 'channel_edit' channel.pk %}">Update</a> this Channel   OR  Create new <a href="">Episode</a> !!</li>
         {% endfor %}
     </ul>
     <h3>Create new <a href="{% url 'channel_new' %}">Channel</a> !!</h3>
