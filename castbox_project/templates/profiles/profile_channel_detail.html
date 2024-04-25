@@ -12,7 +12,7 @@
         <h2>channel_owner : {{ channel.owner }}</h2>
     </div>
     <hr/>
-    <h2><a href="{% url 'profile_channel_edit' channel.id %}">Update</a> this channel !!</h2>
+    <h2><a href="{% url 'profile_channel_edit' user.profile.id channel.id %}">Update</a> this channel !!</h2>
     <h2><a href="{% url 'profile_channel_delete' channel.id %}">Delete</a> this channel !!</h2>
     <hr/>
     <h2>channel_comments :</h2>
