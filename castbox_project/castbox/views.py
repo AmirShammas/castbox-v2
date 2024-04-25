@@ -1,9 +1,10 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Channel, CustomUser, Episode, Comment, Profile
+from .models import Channel, CustomUser, Episode, Comment, Like, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
@@ -45,6 +46,27 @@ class EpisodeListView(LoginRequiredMixin, ListView):
         channel_id = self.kwargs.get('channel_id')
         channel = get_object_or_404(Channel, id=channel_id)
         return Episode.objects.filter(channel=channel)
+
+
+class EpisodeDetailView(LoginRequiredMixin, DetailView):
+    model = Episode
+    template_name = 'episodes/episode_detail.html'
+    context_object_name = 'episode'
+
+
+class EpisodeLikeView(LoginRequiredMixin, View):
+    def post(self, request, channel_id, pk):
+        channel = get_object_or_404(Channel, id=channel_id)
+        episode = get_object_or_404(Episode, id=pk)
+        user = request.user
+        
+        if Like.objects.filter(user=user, channel=channel, episode=episode).exists():
+            return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
+        
+        Like.objects.create(user=user, channel=channel, episode=episode)
+        
+        return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
+
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
