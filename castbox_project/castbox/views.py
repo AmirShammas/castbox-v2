@@ -74,10 +74,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'profiles/profile.html'
     context_object_name = 'profile'
-    
-    def get_object(self, queryset=None):
-        user_id = self.kwargs.get('user_id')
-        return get_object_or_404(Profile, owner_id=user_id)
 
 
 class ProfileChannelDetailView(LoginRequiredMixin, DetailView):
