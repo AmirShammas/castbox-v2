@@ -31,12 +31,12 @@
     <hr/>
     <form action="{% url 'channel_follow' channel.pk %}" method="post">
         {% csrf_token %}
-        <button type="submit">Follow</button>
+        <button type="submit">Follow Channel</button>
     </form>
     <br/>
     <form action="{% url 'channel_unfollow' channel.pk %}" method="post">
         {% csrf_token %}
-        <button type="submit">Unfollow</button>
+        <button type="submit">Unfollow Channel</button>
     </form>
     <h3>Total number of followers for this channel : {{ channel.follows.count }}</h3>
 {% endblock content %}

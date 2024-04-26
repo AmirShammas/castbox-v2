@@ -140,6 +140,19 @@ class Mention(MyBaseModel):
         return str(self.id)
 
 
+class Playlist(MyBaseModel):
+    title = models.CharField(max_length=50, null=True, blank=True, verbose_name="Title")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="playlists", verbose_name="User")
+    channel = models.ManyToManyField(Channel, null=True, blank=True, related_name="playlists", verbose_name="Channels")
+    episode = models.ManyToManyField(Episode, null=True, blank=True, related_name="playlists", verbose_name="Episodes")
+    class Meta:
+        verbose_name = "Playlist"
+        verbose_name_plural = "Playlists"
+        ordering = ("id",)
+
+    def __str__(self):
+        return self.title
+
 
 class Profile(MyBaseModel):
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="profile", verbose_name="Owner")
@@ -149,6 +162,7 @@ class Profile(MyBaseModel):
     like = models.ManyToManyField(Like, null=True, blank=True, related_name="profiles", verbose_name="Likes")
     follow = models.ManyToManyField(Follow, null=True, blank=True, related_name="profiles", verbose_name="Follows")
     mention = models.ManyToManyField(Mention, null=True, blank=True, related_name="profiles", verbose_name="Mentions")
+    playlist = models.ManyToManyField(Playlist, null=True, blank=True, related_name="profiles", verbose_name="Playlists")
 
     class Meta:
         verbose_name = "Profile"
