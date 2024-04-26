@@ -187,3 +187,5 @@ class Profile(MyBaseModel):
     def get_mentions(self):
         return self.mention.all()
 
+    def get_playlists(self):
+        return self.playlist.all()

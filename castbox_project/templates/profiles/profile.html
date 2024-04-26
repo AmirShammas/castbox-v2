@@ -43,4 +43,13 @@
             <li>{{ mention.id }} => {{ mention.message }}</li>
         {% endfor %}
     </ul>
+    <hr/>
+    <h3>My Playlists :</h3>
+    <ul>
+        {% for playlist in profile.get_playlists %}
+            <li><a href="">{{ playlist.id }}</a> => {{ playlist.title }}</li>
+        {% endfor %}
+    </ul>
+    <hr/>
+    <h3>Create new <a href="">Playlist</a> !!</h3>
 {% endblock content %}
