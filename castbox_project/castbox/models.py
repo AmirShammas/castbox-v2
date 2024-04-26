@@ -143,7 +143,6 @@ class Mention(MyBaseModel):
 class Playlist(MyBaseModel):
     title = models.CharField(max_length=50, null=True, blank=True, verbose_name="Title")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="playlists", verbose_name="User")
-    channel = models.ManyToManyField(Channel, null=True, blank=True, related_name="playlists", verbose_name="Channels")
     episode = models.ManyToManyField(Episode, null=True, blank=True, related_name="playlists", verbose_name="Episodes")
     class Meta:
         verbose_name = "Playlist"

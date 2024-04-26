@@ -51,5 +51,5 @@
         {% endfor %}
     </ul>
     <hr/>
-    <h3>Create new <a href="">Playlist</a> !!</h3>
+    <h3>Create new <a href="{% url 'profile_playlist_new' user.profile.id %}">Playlist</a> !!</h3>
 {% endblock content %}

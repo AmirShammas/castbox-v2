@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Profile
+from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Playlist, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
@@ -255,6 +255,7 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
         form.save()
         return super().form_valid(form)
 
+
 class ProfileEpisodeDeleteView(LoginRequiredMixin, DeleteView):
     model = Episode
     context_object_name = "episode"
@@ -264,4 +265,25 @@ class ProfileEpisodeDeleteView(LoginRequiredMixin, DeleteView):
         profile_id = self.kwargs.get('profile_id')
         channel_id = self.kwargs.get('channel_id')
         return reverse('profile_channel_detail', kwargs={'profile_id': profile_id, 'pk': channel_id})
+
+
+class ProfilePlaylistCreateView(LoginRequiredMixin, CreateView):
+    model = Playlist
+    context_object_name = "playlist"
+    template_name = "profiles/profile_playlist_new.html"
+    fields = ["title"]
+    login_url = "login"
+
+    def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
+        return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+
+        profile = Profile.objects.get(owner=self.request.user)
+        profile.playlist.add(form.instance)
+
+        return super().form_valid(form)
 
