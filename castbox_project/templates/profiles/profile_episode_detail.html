@@ -1,7 +1,7 @@
 {% extends "_base.html" %}
 
 {% block title %}
-    Profile-Episode-Details
+    Profile-Episode-Detail
 {% endblock title %}
 
 {% block content %}
@@ -11,6 +11,8 @@
         <h2>episode_description : {{ episode.description }}</h2>
         <h2>episode_owner : {{ episode.owner }}</h2>
     </div>
+    <hr/>
+    <h2>Total number of likes for this episode : {{ episode.likes.count }}</h2>
     <hr/>
     <h2><a href="{% url 'profile_episode_edit' user.profile.id episode.channel.id episode.pk %}">Update</a> this episode !!</h2>
     <h2><a href="{% url 'profile_episode_delete' user.profile.id episode.channel.id episode.pk %}">Delete</a> this episode !!</h2>
