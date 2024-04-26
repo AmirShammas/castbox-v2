@@ -105,12 +105,25 @@ class Like(MyBaseModel):
         return str(self.id)
 
 
+class Follow(MyBaseModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="follows", verbose_name="User")
+    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="follows", verbose_name="Channel")
+    class Meta:
+        verbose_name = "Follow"
+        verbose_name_plural = "Follows"
+        ordering = ("id",)
+
+    def __str__(self):
+        return str(self.id)
+
+
 class Profile(MyBaseModel):
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="profile", verbose_name="Owner")
     channel = models.ManyToManyField(Channel, null=True, blank=True, related_name="profiles", verbose_name="Channels")
     episode = models.ManyToManyField(Episode, null=True, blank=True, related_name="profiles", verbose_name="Episodes")
     comment = models.ManyToManyField(Comment, null=True, blank=True, related_name="profiles", verbose_name="Comments")
     like = models.ManyToManyField(Like, null=True, blank=True, related_name="profiles", verbose_name="Likes")
+    follow = models.ManyToManyField(Follow, null=True, blank=True, related_name="profiles", verbose_name="Follows")
 
     class Meta:
         verbose_name = "Profile"
@@ -128,4 +141,7 @@ class Profile(MyBaseModel):
 
     def get_likes(self):
         return self.like.all()
+
+    def get_follows(self):
+        return self.follow.all()
 

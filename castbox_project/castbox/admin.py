@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.admin import register
-from .models import Channel, Comment, Episode, Like, Profile
+from .models import Channel, Comment, Episode, Follow, Like, Profile
 
 
 CustomUser = get_user_model()
@@ -39,5 +39,11 @@ class ProfileAdmin(admin.ModelAdmin):
 @register(Like)
 class LikeAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "channel", "episode", "is_active",)
+    list_editable = ("is_active",)
+
+
+@register(Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "channel", "is_active",)
     list_editable = ("is_active",)
 

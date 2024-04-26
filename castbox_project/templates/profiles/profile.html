@@ -29,4 +29,11 @@
             <li>{{ like.id }} => {{ like.channel }} => {{ like.episode }} ===> <a href="{% url 'episode_detail' like.channel.id like.episode.pk %}">Go</a> to this episode page !!</li>
         {% endfor %}
     </ul>
+    <hr/>
+    <h3>My Followed Channels :</h3>
+    <ul>
+        {% for follow in profile.get_follows %}
+            <li>{{ follow.id }} => {{ follow.channel }} ===> <a href="{% url 'channel_detail' follow.channel.id %}">Go</a> to this channel page !!</li>
+        {% endfor %}
+    </ul>
 {% endblock content %}

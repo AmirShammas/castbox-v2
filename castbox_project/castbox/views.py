@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Channel, CustomUser, Episode, Comment, Like, Profile
+from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
@@ -34,6 +34,39 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "channel"
     template_name = "channels/channel_detail.html"
     login_url = "login"
+
+
+class ChannelFollowView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        channel = get_object_or_404(Channel, id=pk)
+        user = request.user
+        
+        if Follow.objects.filter(user=user, channel=channel).exists():
+            return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
+        
+        new_follow = Follow.objects.create(user=user, channel=channel)
+
+        profile = Profile.objects.get(owner=self.request.user)
+        profile.follow.add(new_follow)
+        
+        return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
+
+
+class ChannelUnfollowView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        channel = get_object_or_404(Channel, id=pk)
+        user = request.user
+        
+        if not Follow.objects.filter(user=user, channel=channel).exists():
+            return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
+        
+        follow_to_delete = Follow.objects.filter(user=user, channel=channel).first()
+        if follow_to_delete:
+            follow_to_delete.delete()
+            profile = Profile.objects.get(owner=self.request.user)
+            profile.follow.remove(follow_to_delete)
+        
+        return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
 
 
 class EpisodeListView(LoginRequiredMixin, ListView):
