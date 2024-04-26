@@ -36,4 +36,11 @@
             <li>{{ follow.id }} => {{ follow.channel }} ===> <a href="{% url 'channel_detail' follow.channel.id %}">Go</a> to this channel page !!</li>
         {% endfor %}
     </ul>
+    <hr/>
+    <h3>My Mention Messages :</h3>
+    <ul>
+        {% for mention in profile.get_mentions %}
+            <li>{{ mention.id }} => {{ mention.message }}</li>
+        {% endfor %}
+    </ul>
 {% endblock content %}

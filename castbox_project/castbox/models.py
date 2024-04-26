@@ -74,6 +74,15 @@ class Episode(MyBaseModel):
         return self.title
 
 
+@receiver(post_save, sender=Episode)
+def create_episode_mention(sender, instance, created, **kwargs):
+    if created:
+        for follow in instance.channel.follows.all():
+            new_mention = Mention.objects.create(user=follow.user, message=f"A new episode '{instance.title}' created in channel '{instance.channel.title}' !!", channel=instance.channel, episode=instance)
+            profile = Profile.objects.get(owner=follow.user)
+            profile.mention.add(new_mention)
+
+
 class Comment(MyBaseModel):
     title = models.CharField(max_length=50, null=True, blank=True, verbose_name="Title")
     description = models.TextField(null=True, blank=True, verbose_name="Description")
@@ -117,6 +126,21 @@ class Follow(MyBaseModel):
         return str(self.id)
 
 
+class Mention(MyBaseModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="mentions", verbose_name="User")
+    message = models.TextField(null=True, blank=True, verbose_name="Message")
+    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="mentions", verbose_name="Channel")
+    episode = models.ForeignKey(Episode, null=True, blank=True, on_delete=models.CASCADE, related_name="mentions", verbose_name="Episode")
+    class Meta:
+        verbose_name = "Mention"
+        verbose_name_plural = "Mentions"
+        ordering = ("id",)
+
+    def __str__(self):
+        return str(self.id)
+
+
+
 class Profile(MyBaseModel):
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="profile", verbose_name="Owner")
     channel = models.ManyToManyField(Channel, null=True, blank=True, related_name="profiles", verbose_name="Channels")
@@ -124,6 +148,7 @@ class Profile(MyBaseModel):
     comment = models.ManyToManyField(Comment, null=True, blank=True, related_name="profiles", verbose_name="Comments")
     like = models.ManyToManyField(Like, null=True, blank=True, related_name="profiles", verbose_name="Likes")
     follow = models.ManyToManyField(Follow, null=True, blank=True, related_name="profiles", verbose_name="Follows")
+    mention = models.ManyToManyField(Mention, null=True, blank=True, related_name="profiles", verbose_name="Mentions")
 
     class Meta:
         verbose_name = "Profile"
@@ -144,4 +169,7 @@ class Profile(MyBaseModel):
 
     def get_follows(self):
         return self.follow.all()
+
+    def get_mentions(self):
+        return self.mention.all()
 
