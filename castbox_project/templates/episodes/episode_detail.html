@@ -18,5 +18,10 @@
         {% csrf_token %}
         <button type="submit">Like</button>
     </form>
+    <br/>
+    <form action="{% url 'episode_unlike' episode.channel.id episode.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Unlike</button>
+    </form>
     <h3>Total number of likes for this episode : {{ episode.likes.count }}</h3>
 {% endblock content %}

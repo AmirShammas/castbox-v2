@@ -71,6 +71,24 @@ class EpisodeLikeView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
 
 
+class EpisodeUnlikeView(LoginRequiredMixin, View):
+    def post(self, request, channel_id, pk):
+        channel = get_object_or_404(Channel, id=channel_id)
+        episode = get_object_or_404(Episode, id=pk)
+        user = request.user
+        
+        if not Like.objects.filter(user=user, channel=channel, episode=episode).exists():
+            return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
+        
+        like_to_delete = Like.objects.filter(user=user, channel=channel, episode=episode).first()
+        if like_to_delete:
+            like_to_delete.delete()
+            profile = Profile.objects.get(owner=self.request.user)
+            profile.like.remove(like_to_delete)
+        
+        return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
+
+
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     context_object_name = "comment"

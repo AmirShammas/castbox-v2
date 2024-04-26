@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
+from .views import EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
 
 urlpatterns = [
     path("accounts/signup/", SignupPageView.as_view(), name="signup"),
@@ -10,6 +10,7 @@ urlpatterns = [
     path("channel/<int:channel_id>/comment/", CommentCreateView.as_view(), name="comment_new"),
     path("channel/<int:channel_id>/episode/<int:pk>/", EpisodeDetailView.as_view(), name="episode_detail"),
     path("channel/<int:channel_id>/episode/<int:pk>/like", EpisodeLikeView.as_view(), name='episode_like'),
+    path("channel/<int:channel_id>/episode/<int:pk>/unlike", EpisodeUnlikeView.as_view(), name='episode_unlike'),
     path("profile/<int:pk>/", ProfileDetailView.as_view(), name='profile'),
     path("profile/<int:profile_id>/channel/<int:pk>/", ProfileChannelDetailView.as_view(), name='profile_channel_detail'),
     path("profile/<int:profile_id>/channel/new/", ProfileChannelCreateView.as_view(), name="profile_channel_new"),
