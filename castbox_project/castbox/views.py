@@ -294,3 +294,21 @@ class ProfilePlaylistDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'playlist'
 
 
+class ProfilePlaylistUpdateView(LoginRequiredMixin, UpdateView):
+    model = Playlist
+    context_object_name = "playlist"
+    template_name = "profiles/profile_playlist_edit.html"
+    fields = ["title"]
+    login_url = "login"
+
+    def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
+        return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+
+        return super().form_valid(form)
+
+

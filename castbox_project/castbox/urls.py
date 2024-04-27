@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
+from .views import ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
 
 urlpatterns = [
     path("accounts/signup/", SignupPageView.as_view(), name="signup"),
@@ -24,4 +24,5 @@ urlpatterns = [
     path("profile/<int:profile_id>/channel/<int:channel_id>/episode/<int:pk>/delete/", ProfileEpisodeDeleteView.as_view(), name="profile_episode_delete"),
     path("profile/<int:profile_id>/playlist/new/", ProfilePlaylistCreateView.as_view(), name="profile_playlist_new"),
     path("profile/<int:profile_id>/playlist/<int:pk>/", ProfilePlaylistDetailView.as_view(), name='profile_playlist_detail'),
+    path("profile/<int:profile_id>/playlist/<int:pk>/edit/", ProfilePlaylistUpdateView.as_view(), name="profile_playlist_edit"),
 ]

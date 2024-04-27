@@ -11,7 +11,7 @@
         <h2>playlist_user : {{ playlist.user }}</h2>
     </div>
     <hr/>
-    <h2><a href="">Update</a> this playlist title !!</h2>
+    <h2><a href="{% url 'profile_playlist_edit' user.profile.id playlist.id %}">Update</a> this playlist title !!</h2>
     <h2><a href="">Delete</a> this playlist !!</h2>
     <hr/>
     <h2>playlist_episodes :</h2>
