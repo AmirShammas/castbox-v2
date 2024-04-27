@@ -312,3 +312,13 @@ class ProfilePlaylistUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
+    model = Playlist
+    context_object_name = "playlist"
+    template_name = "profiles/profile_playlist_delete.html"
+    
+    def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
+        return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+
