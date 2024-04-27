@@ -287,3 +287,10 @@ class ProfilePlaylistCreateView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
+
+class ProfilePlaylistDetailView(LoginRequiredMixin, DetailView):
+    model = Playlist
+    template_name = 'profiles/profile_playlist_detail.html'
+    context_object_name = 'playlist'
+
+

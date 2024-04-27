@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+
+{% block title %}
+    Profile-Playlist-Detail
+{% endblock title %}
+
+{% block content %}
+    <div>
+        <h2>playlist_id : {{ playlist.id }}</h2>
+        <h2>playlist_title : {{ playlist.title }}</h2>
+        <h2>playlist_user : {{ playlist.user }}</h2>
+    </div>
+    <hr/>
+    <h2><a href="">Update</a> this playlist title !!</h2>
+    <h2><a href="">Delete</a> this playlist !!</h2>
+    <hr/>
+    <h2>playlist_episodes :</h2>
+    {% for episode in playlist.episodes.all %}
+        <div>
+            <h3>{{ episode.id }} => {{ episode.title }}</h3>
+        </div>
+    {% endfor %}
+{% endblock content %}
