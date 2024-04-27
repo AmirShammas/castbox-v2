@@ -1,6 +1,6 @@
 from django import forms
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, View, FormView
@@ -321,6 +321,29 @@ class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+
+# class ProfilePlaylistEpisodeDeleteView(LoginRequiredMixin, DeleteView):
+#     model = Playlist
+#     context_object_name = "playlist"
+#     template_name = "profiles/profile_playlist_episode_delete.html"
+    
+#     def get_success_url(self):
+#         profile_id = self.kwargs.get('profile_id')
+#         return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+
+class ProfilePlaylistEpisodeDeleteView(View):
+    def get(self, request, profile_id, pk, episode_id):
+        playlist = get_object_or_404(Playlist, id=pk)
+        episode = get_object_or_404(playlist.episode, id=episode_id)
+        return render(request, 'profiles/profile_playlist_episode_delete.html', {'episode': episode, 'playlist': playlist})
+
+    def post(self, request, profile_id, pk, episode_id):
+        playlist = get_object_or_404(Playlist, id=pk)
+        episode = get_object_or_404(playlist.episode, id=episode_id)
+        playlist.episode.remove(episode)
+        return HttpResponseRedirect(reverse('profile_playlist_detail', args=[profile_id, pk]))
 
 
 class SelectPlaylistForm(forms.Form):

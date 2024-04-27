@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <h1>Remove Episode from Playlist</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h2>Are you sure you want to remove "{{ episode.title }}" from playlist "{{ playlist.title }}" ?</h2>
+        <input type="submit" value="CONFIRM">
+    </form>
+    <h4><a href="{% url 'profile' user.profile.id %}">CANCEL</a></h4>
+{% endblock content %}

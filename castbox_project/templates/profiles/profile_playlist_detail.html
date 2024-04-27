@@ -5,6 +5,8 @@
 {% endblock title %}
 
 {% block content %}
+    <h3><a href="{% url 'profile' user.profile.id %}">Back</a> to profile page !!</h3>
+    <hr/>
     <div>
         <h2>playlist_id : {{ playlist.id }}</h2>
         <h2>playlist_title : {{ playlist.title }}</h2>
@@ -17,7 +19,7 @@
     <h2>playlist_episodes :</h2>
     {% for episode in playlist.episode.all %}
         <div>
-            <h3>{{ episode.id }} => {{ episode.title }}</h3>
+            <h3>{{ episode.id }} => {{ episode.title }} => <a href="{% url 'profile_playlist_episode_delete' user.profile.id playlist.id episode.id %}">Remove</a> this episode from playlist !!</h3>
         </div>
     {% endfor %}
 {% endblock content %}
