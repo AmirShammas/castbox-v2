@@ -1,8 +1,9 @@
+from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic import TemplateView, ListView, DetailView, View
+from django.views.generic import TemplateView, ListView, DetailView, View, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Playlist, Profile
 from .forms import CustomUserCreationForm
@@ -320,5 +321,40 @@ class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+
+class SelectPlaylistForm(forms.Form):
+    playlist = forms.ChoiceField(choices=[])
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(SelectPlaylistForm, self).__init__(*args, **kwargs)
+        self.fields['playlist'].choices = [(playlist.id, playlist.title) for playlist in user.playlists.all()]
+
+
+class EpisodeSelectPlaylistView(FormView):
+    template_name = 'episodes/episode_select_playlist.html'
+    form_class = SelectPlaylistForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        playlist_id = form.cleaned_data['playlist']
+        episode_id = self.kwargs['pk']
+        playlist = Playlist.objects.get(pk=playlist_id)
+        episode = Episode.objects.get(pk=episode_id)
+
+        if episode in playlist.episode.all():
+            return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']}))
+
+        playlist.episode.add(episode)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']})
 
 

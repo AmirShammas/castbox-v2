@@ -16,12 +16,18 @@
     <hr/>
     <form action="{% url 'episode_like' episode.channel.id episode.pk %}" method="post">
         {% csrf_token %}
-        <button type="submit">Like Episode</button>
+        <button type="submit">Like this Episode</button>
     </form>
     <br/>
     <form action="{% url 'episode_unlike' episode.channel.id episode.pk %}" method="post">
         {% csrf_token %}
-        <button type="submit">Unlike Episode</button>
+        <button type="submit">Unlike this Episode</button>
     </form>
     <h3>Total number of likes for this episode : {{ episode.likes.count }}</h3>
+    <hr/>
+    <form action="{% url 'episode_select_playlist' episode.channel.id episode.pk %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add this Episode to Playlist</button>
+    </form>
 {% endblock content %}

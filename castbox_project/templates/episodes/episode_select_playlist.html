@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block title %}
+    Select Playlist
+{% endblock title %}
+
+{% block content %}
+    <h3>Select a Playlist to add the episode:</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Episode to this Playlist</button>
+    </form>
+{% endblock content %}

@@ -15,7 +15,7 @@
     <h2><a href="{% url 'profile_playlist_delete' user.profile.id playlist.id %}">Delete</a> this playlist !!</h2>
     <hr/>
     <h2>playlist_episodes :</h2>
-    {% for episode in playlist.episodes.all %}
+    {% for episode in playlist.episode.all %}
         <div>
             <h3>{{ episode.id }} => {{ episode.title }}</h3>
         </div>
