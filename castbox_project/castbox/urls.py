@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EpisodePlayView, ProfileCommentDeleteView, ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
+from .views import EpisodePlayView, LogListView, ProfileCommentDeleteView, ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
 
 urlpatterns = [
     path("accounts/signup/", SignupPageView.as_view(), name="signup"),
@@ -32,4 +32,5 @@ urlpatterns = [
     path("profile/<int:profile_id>/playlist/<int:pk>/edit/", ProfilePlaylistUpdateView.as_view(), name="profile_playlist_edit"),
     path("profile/<int:profile_id>/playlist/<int:pk>/delete/", ProfilePlaylistDeleteView.as_view(), name="profile_playlist_delete"),
     path("profile/<int:profile_id>/playlist/<int:pk>/episode/<int:episode_id>/delete/", ProfilePlaylistEpisodeDeleteView.as_view(), name="profile_playlist_episode_delete"),
+    path("log/", LogListView.as_view(), name="log_list"),
 ]

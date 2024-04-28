@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block title %}
+    Log-List
+{% endblock title %}
+
+{% block content %}
+    {% for log in log_list %}
+        <div>
+            <h2>{{ log.id }} => {{ log.created_at }} => {{ log.message }}</h2>
+            <hr/>
+        </div>
+    {% endfor %}
+{% endblock content %}

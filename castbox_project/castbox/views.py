@@ -422,3 +422,13 @@ class EpisodePlayView(LoginRequiredMixin, DetailView):
         Log.objects.create(user=request.user, message=log_message, channel=episode.channel, episode=episode)
         return super().get(request, *args, **kwargs)
 
+
+class LogListView(LoginRequiredMixin, ListView):
+    model = Log
+    context_object_name = "log_list"
+    template_name = "logs/log_list.html"
+    login_url = "login"
+
+    def get_queryset(self):
+        return Log.objects.all()
+
