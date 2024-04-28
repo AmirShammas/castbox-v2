@@ -14,5 +14,5 @@
     </div>
     <hr/>
     <h2><a href="{% url 'profile_comment_edit' user.profile.id comment.channel.id comment.pk %}">Update</a> this comment !!</h2>
-    <h2><a href="">Delete</a> this comment !!</h2>
+    <h2><a href="{% url 'profile_comment_delete' user.profile.id comment.channel.id comment.pk %}">Delete</a> this comment !!</h2>
 {% endblock content %}

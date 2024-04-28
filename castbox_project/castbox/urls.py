@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
+from .views import ProfileCommentDeleteView, ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ChannelDetailView, ChannelListView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
 
 urlpatterns = [
     path("accounts/signup/", SignupPageView.as_view(), name="signup"),
@@ -21,6 +21,7 @@ urlpatterns = [
     path("profile/<int:profile_id>/channel/<int:pk>/delete/", ProfileChannelDeleteView.as_view(), name="profile_channel_delete"),
     path("profile/<int:profile_id>/channel/<int:channel_id>/comment/<int:pk>/", ProfileCommentDetailView.as_view(), name='profile_comment_detail'),
     path("profile/<int:profile_id>/channel/<int:channel_id>/comment/<int:pk>/edit/", ProfileCommentUpdateView.as_view(), name='profile_comment_edit'),
+    path("profile/<int:profile_id>/channel/<int:channel_id>/comment/<int:pk>/delete/", ProfileCommentDeleteView.as_view(), name='profile_comment_delete'),
     path("profile/<int:profile_id>/channel/<int:channel_id>/episode/new/", ProfileEpisodeCreateView.as_view(), name="profile_episode_new"),
     path("profile/<int:profile_id>/channel/<int:channel_id>/episode/<int:pk>/", ProfileEpisodeDetailView.as_view(), name="profile_episode_detail"),
     path("profile/<int:profile_id>/channel/<int:channel_id>/episode/<int:pk>/edit/", ProfileEpisodeUpdateView.as_view(), name="profile_episode_edit"),

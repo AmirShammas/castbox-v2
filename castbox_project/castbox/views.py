@@ -231,6 +231,16 @@ class ProfileCommentUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+class ProfileCommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+    context_object_name = "comment"
+    template_name = "profiles/profile_comment_delete.html"
+    
+    def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
+        return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+
 class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
     model = Episode
     context_object_name = "episode"
