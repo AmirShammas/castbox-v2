@@ -373,7 +373,7 @@ class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'pk': profile_id})
 
 
-class ProfilePlaylistEpisodeDeleteView(View):
+class ProfilePlaylistEpisodeDeleteView(LoginRequiredMixin, View):
     def get(self, request, profile_id, pk, episode_id):
         playlist = get_object_or_404(Playlist, id=pk)
         episode = get_object_or_404(playlist.episode, id=episode_id)
@@ -386,7 +386,7 @@ class ProfilePlaylistEpisodeDeleteView(View):
         return HttpResponseRedirect(reverse('profile_playlist_detail', args=[profile_id, pk]))
 
 
-class SelectPlaylistForm(forms.Form):
+class SelectPlaylistForm(LoginRequiredMixin, forms.Form):
     playlist = forms.ChoiceField(choices=[])
 
     def __init__(self, *args, **kwargs):
@@ -395,7 +395,7 @@ class SelectPlaylistForm(forms.Form):
         self.fields['playlist'].choices = [(playlist.id, playlist.title) for playlist in user.playlists.all()]
 
 
-class EpisodeSelectPlaylistView(FormView):
+class EpisodeSelectPlaylistView(LoginRequiredMixin, FormView):
     template_name = 'episodes/episode_select_playlist.html'
     form_class = SelectPlaylistForm
 
