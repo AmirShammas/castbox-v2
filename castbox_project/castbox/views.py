@@ -36,6 +36,12 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
     template_name = "channels/channel_detail.html"
     login_url = "login"
 
+    def get(self, request, *args, **kwargs):
+        channel = get_object_or_404(Channel, pk=self.kwargs['pk'])
+        log_message = f"The user '{request.user}' watched the channel '{channel.title}' !!"
+        Log.objects.create(user=request.user, message=log_message, channel=channel)
+        return super().get(request, *args, **kwargs)
+
 
 class ChannelFollowView(LoginRequiredMixin, View):
     def post(self, request, pk):
