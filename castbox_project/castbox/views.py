@@ -207,6 +207,12 @@ class ProfileChannelDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'pk': profile_id})
 
 
+class ProfileCommentDetailView(LoginRequiredMixin, DetailView):
+    model = Comment
+    template_name = 'profiles/profile_comment_detail.html'
+    context_object_name = 'comment'
+
+
 class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
     model = Episode
     context_object_name = "episode"

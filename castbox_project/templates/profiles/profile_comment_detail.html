@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+
+{% block title %}
+    Profile-Comment-Detail
+{% endblock title %}
+
+{% block content %}
+    <div>
+        <h2>comment_id : {{ comment.id }}</h2>
+        <h2>comment_title : {{ comment.title }}</h2>
+        <h2>comment_description : {{ comment.description }}</h2>
+        <h2>comment_author : {{ comment.author }}</h2>
+        <h2>comment_channel : {{ comment.channel }}</h2>
+    </div>
+    <hr/>
+    <h2><a href="">Update</a> this comment !!</h2>
+    <h2><a href="">Delete</a> this comment !!</h2>
+{% endblock content %}

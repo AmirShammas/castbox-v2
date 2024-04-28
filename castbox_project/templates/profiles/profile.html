@@ -10,7 +10,7 @@
     <h3>My Comments :</h3>
     <ul>
         {% for comment in profile.get_comments %}
-            <li>{{ comment.id }} => {{ comment.title }} => {{ comment.description }} => {{ comment.channel }}</li>
+            <li><a href="{% url 'profile_comment_detail' user.profile.id comment.channel.id comment.pk %}">{{ comment.id }}</a> => {{ comment.title }}</li>
         {% endfor %}
     </ul>
     <hr/>
