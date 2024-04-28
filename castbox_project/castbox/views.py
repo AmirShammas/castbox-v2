@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, View, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Playlist, Profile
+from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Log, Playlist, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
@@ -357,16 +357,6 @@ class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'pk': profile_id})
 
 
-# class ProfilePlaylistEpisodeDeleteView(LoginRequiredMixin, DeleteView):
-#     model = Playlist
-#     context_object_name = "playlist"
-#     template_name = "profiles/profile_playlist_episode_delete.html"
-    
-#     def get_success_url(self):
-#         profile_id = self.kwargs.get('profile_id')
-#         return reverse_lazy('profile', kwargs={'pk': profile_id})
-
-
 class ProfilePlaylistEpisodeDeleteView(View):
     def get(self, request, profile_id, pk, episode_id):
         playlist = get_object_or_404(Playlist, id=pk)
@@ -414,4 +404,15 @@ class EpisodeSelectPlaylistView(FormView):
     def get_success_url(self):
         return reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']})
 
+
+class EpisodePlayView(LoginRequiredMixin, DetailView):
+    model = Episode
+    template_name = 'episodes/episode_play.html'
+    context_object_name = 'episode'
+
+    def get(self, request, *args, **kwargs):
+        episode = get_object_or_404(Episode, pk=self.kwargs['pk'])
+        log_message = f"The user '{request.user}' played the episode '{episode.title}' !!"
+        Log.objects.create(user=request.user, message=log_message, channel=episode.channel, episode=episode)
+        return super().get(request, *args, **kwargs)
 

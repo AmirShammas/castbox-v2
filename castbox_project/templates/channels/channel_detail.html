@@ -26,6 +26,7 @@
     {% for episode in channel.episodes.all %}
         <div>
             <h3><a href="{% url 'episode_detail' channel.id episode.pk %}">{{ episode.id }}</a> => {{ episode.title }} => {{ episode.description }}</h3>
+            <h3><a href="{% url 'episode_play' channel.id episode.pk %}">Play</a> this Episode !!</h3>
             <form action="{% url 'episode_select_playlist' channel.id episode.pk %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
