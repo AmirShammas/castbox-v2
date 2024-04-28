@@ -194,3 +194,18 @@ class Profile(MyBaseModel):
 
     def get_playlists(self):
         return self.playlist.all()
+
+
+class Log(MyBaseModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="logs", verbose_name="User")
+    message = models.TextField(null=True, blank=True, verbose_name="Message")
+    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="logs", verbose_name="Channel")
+    episode = models.ForeignKey(Episode, null=True, blank=True, on_delete=models.CASCADE, related_name="logs", verbose_name="Episode")
+    class Meta:
+        verbose_name = "Log"
+        verbose_name_plural = "Logs"
+        ordering = ("id",)
+
+    def __str__(self):
+        return str(self.id)
+
