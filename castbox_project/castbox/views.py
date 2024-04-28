@@ -1,5 +1,5 @@
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -9,6 +9,16 @@ from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Log, Pl
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+
+
+def superuser_required(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
 
 
 class SignupPageView(generic.CreateView):
@@ -423,6 +433,7 @@ class EpisodePlayView(LoginRequiredMixin, DetailView):
         return super().get(request, *args, **kwargs)
 
 
+@method_decorator(superuser_required, name='dispatch')
 class LogListView(LoginRequiredMixin, ListView):
     model = Log
     context_object_name = "log_list"
