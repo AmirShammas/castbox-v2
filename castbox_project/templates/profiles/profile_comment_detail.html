@@ -13,6 +13,6 @@
         <h2>comment_channel : {{ comment.channel }}</h2>
     </div>
     <hr/>
-    <h2><a href="">Update</a> this comment !!</h2>
+    <h2><a href="{% url 'profile_comment_edit' user.profile.id comment.channel.id comment.pk %}">Update</a> this comment !!</h2>
     <h2><a href="">Delete</a> this comment !!</h2>
 {% endblock content %}

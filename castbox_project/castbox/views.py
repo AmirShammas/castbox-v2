@@ -213,6 +213,24 @@ class ProfileCommentDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'comment'
 
 
+class ProfileCommentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    context_object_name = "comment"
+    template_name = "profiles/profile_comment_edit.html"
+    fields = ["title", "description"]
+    login_url = "login"
+
+    def get_success_url(self):
+        profile_id = self.kwargs.get('profile_id')
+        return reverse_lazy('profile', kwargs={'pk': profile_id})
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.save()
+
+        return super().form_valid(form)
+
+
 class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
     model = Episode
     context_object_name = "episode"
