@@ -21,6 +21,107 @@ def superuser_required(view_func):
     return decorated_view_func
 
 
+def profile_owner_required_1(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['pk'])
+        if not request.user==profile.owner:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+def profile_owner_required_2(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
+        channel = get_object_or_404(Channel, pk=kwargs['pk'])
+        if not request.user==profile.owner or not request.user==channel.owner:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+def profile_owner_required_3(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
+        if not request.user==profile.owner:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+
+def profile_owner_required_4(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
+        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
+        if not request.user==profile.owner or not comment.channel==channel or not request.user==comment.author:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+def profile_owner_required_5(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
+        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
+        if not request.user==profile.owner or not request.user==channel.owner:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+def profile_owner_required_6(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
+        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
+        episode = get_object_or_404(Episode, pk=kwargs['pk'])
+        if not request.user==profile.owner or not request.user==channel.owner or not request.user==episode.owner or not episode.channel==channel:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+def profile_owner_required_7(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
+        playlist = get_object_or_404(Playlist, pk=kwargs['pk'])
+        if not request.user==profile.owner or not request.user==playlist.user:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+def profile_owner_required_8(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
+        playlist = get_object_or_404(Playlist, pk=kwargs['pk'])
+        episode = get_object_or_404(Episode, pk=kwargs['episode_id'])
+        if not request.user==profile.owner or not request.user==playlist.user or not episode in playlist.episode.all():
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
+def channel_episode_required(view_func):
+    def decorated_view_func(request, *args, **kwargs):
+        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
+        episode = get_object_or_404(Episode, pk=kwargs['pk'])
+        if not episode.channel==channel:
+            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
+            return HttpResponseForbidden(message)
+        return view_func(request, *args, **kwargs)
+    return decorated_view_func
+
+
 class SignupPageView(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
@@ -98,12 +199,14 @@ class EpisodeListView(LoginRequiredMixin, ListView):
         return Episode.objects.filter(channel=channel)
 
 
+@method_decorator(channel_episode_required, name='dispatch')
 class EpisodeDetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'episodes/episode_detail.html'
     context_object_name = 'episode'
 
 
+@method_decorator(channel_episode_required, name='dispatch')
 class EpisodeLikeView(LoginRequiredMixin, View):
     def post(self, request, channel_id, pk):
         channel = get_object_or_404(Channel, id=channel_id)
@@ -121,6 +224,7 @@ class EpisodeLikeView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
 
 
+@method_decorator(channel_episode_required, name='dispatch')
 class EpisodeUnlikeView(LoginRequiredMixin, View):
     def post(self, request, channel_id, pk):
         channel = get_object_or_404(Channel, id=channel_id)
@@ -163,18 +267,20 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return reverse('channel_detail', kwargs={'pk': channel_id})
 
 
+@method_decorator(profile_owner_required_1, name='dispatch')
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'profiles/profile.html'
     context_object_name = 'profile'
 
 
+@method_decorator(profile_owner_required_2, name='dispatch')
 class ProfileChannelDetailView(LoginRequiredMixin, DetailView):
     model = Channel
     template_name = 'profiles/profile_channel_detail.html'
     context_object_name = 'channel'
 
-
+@method_decorator(profile_owner_required_3, name='dispatch')
 class ProfileChannelCreateView(LoginRequiredMixin, CreateView):
     model = Channel
     context_object_name = "channel"
@@ -195,6 +301,8 @@ class ProfileChannelCreateView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
+
+@method_decorator(profile_owner_required_2, name='dispatch')
 class ProfileChannelUpdateView(LoginRequiredMixin, UpdateView):
     model = Channel
     context_object_name = "channel"
@@ -213,6 +321,7 @@ class ProfileChannelUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+@method_decorator(profile_owner_required_2, name='dispatch')
 class ProfileChannelDeleteView(LoginRequiredMixin, DeleteView):
     model = Channel
     context_object_name = "channel"
@@ -223,12 +332,14 @@ class ProfileChannelDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'pk': profile_id})
 
 
+@method_decorator(profile_owner_required_4, name='dispatch')
 class ProfileCommentDetailView(LoginRequiredMixin, DetailView):
     model = Comment
     template_name = 'profiles/profile_comment_detail.html'
     context_object_name = 'comment'
 
 
+@method_decorator(profile_owner_required_4, name='dispatch')
 class ProfileCommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     context_object_name = "comment"
@@ -247,6 +358,7 @@ class ProfileCommentUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+@method_decorator(profile_owner_required_4, name='dispatch')
 class ProfileCommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
     context_object_name = "comment"
@@ -257,6 +369,7 @@ class ProfileCommentDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'pk': profile_id})
 
 
+@method_decorator(profile_owner_required_5, name='dispatch')
 class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
     model = Episode
     context_object_name = "episode"
@@ -282,12 +395,14 @@ class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
         return reverse('profile_channel_detail', kwargs={'profile_id': profile_id, 'pk': channel_id})
 
 
+@method_decorator(profile_owner_required_6, name='dispatch')
 class ProfileEpisodeDetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'profiles/profile_episode_detail.html'
     context_object_name = 'episode'
 
 
+@method_decorator(profile_owner_required_6, name='dispatch')
 class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
     model = Episode
     context_object_name = "episode"
@@ -307,6 +422,7 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+@method_decorator(profile_owner_required_6, name='dispatch')
 class ProfileEpisodeDeleteView(LoginRequiredMixin, DeleteView):
     model = Episode
     context_object_name = "episode"
@@ -318,6 +434,7 @@ class ProfileEpisodeDeleteView(LoginRequiredMixin, DeleteView):
         return reverse('profile_channel_detail', kwargs={'profile_id': profile_id, 'pk': channel_id})
 
 
+@method_decorator(profile_owner_required_3, name='dispatch')
 class ProfilePlaylistCreateView(LoginRequiredMixin, CreateView):
     model = Playlist
     context_object_name = "playlist"
@@ -339,12 +456,14 @@ class ProfilePlaylistCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+@method_decorator(profile_owner_required_7, name='dispatch')
 class ProfilePlaylistDetailView(LoginRequiredMixin, DetailView):
     model = Playlist
     template_name = 'profiles/profile_playlist_detail.html'
     context_object_name = 'playlist'
 
 
+@method_decorator(profile_owner_required_7, name='dispatch')
 class ProfilePlaylistUpdateView(LoginRequiredMixin, UpdateView):
     model = Playlist
     context_object_name = "playlist"
@@ -363,6 +482,7 @@ class ProfilePlaylistUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+@method_decorator(profile_owner_required_7, name='dispatch')
 class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
     model = Playlist
     context_object_name = "playlist"
@@ -373,6 +493,7 @@ class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'pk': profile_id})
 
 
+@method_decorator(profile_owner_required_8, name='dispatch')
 class ProfilePlaylistEpisodeDeleteView(LoginRequiredMixin, View):
     def get(self, request, profile_id, pk, episode_id):
         playlist = get_object_or_404(Playlist, id=pk)
@@ -395,6 +516,7 @@ class SelectPlaylistForm(LoginRequiredMixin, forms.Form):
         self.fields['playlist'].choices = [(playlist.id, playlist.title) for playlist in user.playlists.all()]
 
 
+@method_decorator(channel_episode_required, name='dispatch')
 class EpisodeSelectPlaylistView(LoginRequiredMixin, FormView):
     template_name = 'episodes/episode_select_playlist.html'
     form_class = SelectPlaylistForm
@@ -421,6 +543,7 @@ class EpisodeSelectPlaylistView(LoginRequiredMixin, FormView):
         return reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']})
 
 
+@method_decorator(channel_episode_required, name='dispatch')
 class EpisodePlayView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'episodes/episode_play.html'
