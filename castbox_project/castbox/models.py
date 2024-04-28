@@ -20,6 +20,12 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(owner=instance)
 
 
+@receiver(post_save, sender=CustomUser)
+def create_default_playlist(sender, instance, created, **kwargs):
+    if created:
+        Playlist.objects.create(user=instance, title="default-playlist")
+
+
 class MyBaseModel(models.Model):
     is_active = models.BooleanField(
         default=False,
