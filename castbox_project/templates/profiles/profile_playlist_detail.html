@@ -20,6 +20,7 @@
     {% for episode in playlist.episode.all %}
         <div>
             <h3>{{ episode.id }} => {{ episode.title }} => <a href="{% url 'profile_playlist_episode_delete' user.profile.id playlist.id episode.id %}">Remove</a> this episode from playlist !!</h3>
+            <h3><a href="{% url 'episode_play' episode.channel.id episode.id %}">Play</a> this Episode !!</h3>
         </div>
     {% endfor %}
 {% endblock content %}
