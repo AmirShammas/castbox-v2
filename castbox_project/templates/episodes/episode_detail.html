@@ -25,6 +25,7 @@
     </form>
     <h3>Total number of likes for this episode : {{ episode.likes.count }}</h3>
     <hr/>
+    <h3><a href="{% url 'episode_play' episode.channel.id episode.pk %}">Play</a> this Episode !!</h3>
     <form action="{% url 'episode_select_playlist' episode.channel.id episode.pk %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
