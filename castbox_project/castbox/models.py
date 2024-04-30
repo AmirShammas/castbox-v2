@@ -23,7 +23,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=CustomUser)
 def create_default_playlist(sender, instance, created, **kwargs):
     if created:
-        Playlist.objects.create(user=instance, title="default-playlist")
+        new_playlist = Playlist.objects.create(user=instance, title="default-playlist")
+        profile = Profile.objects.get(owner=instance)
+        profile.playlist.add(new_playlist)
 
 
 class MyBaseModel(models.Model):
