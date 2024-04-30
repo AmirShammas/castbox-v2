@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
         verbose_name_plural = "CustomUsers"
         ordering = ("id",)
 
-   
+
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -23,7 +23,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=CustomUser)
 def create_default_playlist(sender, instance, created, **kwargs):
     if created:
-        new_playlist = Playlist.objects.create(user=instance, title="default-playlist")
+        new_playlist = Playlist.objects.create(
+            user=instance, title="default-playlist")
         profile = Profile.objects.get(owner=instance)
         profile.playlist.add(new_playlist)
 
@@ -54,9 +55,12 @@ class MyBaseModel(models.Model):
 
 
 class Channel(MyBaseModel):
-    title = models.CharField(max_length=50, null=True, blank=True, verbose_name="Title")
-    description = models.TextField(null=True, blank=True, verbose_name="Description")
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="channels", verbose_name="Owner")
+    title = models.CharField(max_length=50, null=True,
+                             blank=True, verbose_name="Title")
+    description = models.TextField(
+        null=True, blank=True, verbose_name="Description")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                              on_delete=models.CASCADE, related_name="channels", verbose_name="Owner")
 
     class Meta:
         verbose_name = "Channel"
@@ -68,10 +72,14 @@ class Channel(MyBaseModel):
 
 
 class Episode(MyBaseModel):
-    title = models.CharField(max_length=50, null=True, blank=True, verbose_name="Title")
-    description = models.TextField(null=True, blank=True, verbose_name="Description")
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="episodes", verbose_name="Owner")
-    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="episodes", verbose_name="Channel")
+    title = models.CharField(max_length=50, null=True,
+                             blank=True, verbose_name="Title")
+    description = models.TextField(
+        null=True, blank=True, verbose_name="Description")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                              on_delete=models.CASCADE, related_name="episodes", verbose_name="Owner")
+    channel = models.ForeignKey(Channel, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="episodes", verbose_name="Channel")
 
     class Meta:
         verbose_name = "Episode"
@@ -86,16 +94,21 @@ class Episode(MyBaseModel):
 def create_episode_mention(sender, instance, created, **kwargs):
     if created:
         for follow in instance.channel.follows.all():
-            new_mention = Mention.objects.create(user=follow.user, message=f"A new episode '{instance.title}' created in channel '{instance.channel.title}' !!", channel=instance.channel, episode=instance)
+            new_mention = Mention.objects.create(
+                user=follow.user, message=f"A new episode '{instance.title}' created in channel '{instance.channel.title}' !!", channel=instance.channel, episode=instance)
             profile = Profile.objects.get(owner=follow.user)
             profile.mention.add(new_mention)
 
 
 class Comment(MyBaseModel):
-    title = models.CharField(max_length=50, null=True, blank=True, verbose_name="Title")
-    description = models.TextField(null=True, blank=True, verbose_name="Description")
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="comments", verbose_name="Author")
-    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="comments", verbose_name="Channel")
+    title = models.CharField(max_length=50, null=True,
+                             blank=True, verbose_name="Title")
+    description = models.TextField(
+        null=True, blank=True, verbose_name="Description")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                               on_delete=models.CASCADE, related_name="comments", verbose_name="Author")
+    channel = models.ForeignKey(Channel, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="comments", verbose_name="Channel")
 
     class Meta:
         verbose_name = "Comment"
@@ -110,9 +123,13 @@ class Comment(MyBaseModel):
 
 
 class Like(MyBaseModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="likes", verbose_name="User")
-    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="likes", verbose_name="Channel")
-    episode = models.ForeignKey(Episode, null=True, blank=True, on_delete=models.CASCADE, related_name="likes", verbose_name="Episode")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                             on_delete=models.CASCADE, related_name="likes", verbose_name="User")
+    channel = models.ForeignKey(Channel, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="likes", verbose_name="Channel")
+    episode = models.ForeignKey(Episode, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="likes", verbose_name="Episode")
+
     class Meta:
         verbose_name = "Like"
         verbose_name_plural = "Likes"
@@ -123,8 +140,11 @@ class Like(MyBaseModel):
 
 
 class Follow(MyBaseModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="follows", verbose_name="User")
-    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="follows", verbose_name="Channel")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                             on_delete=models.CASCADE, related_name="follows", verbose_name="User")
+    channel = models.ForeignKey(Channel, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="follows", verbose_name="Channel")
+
     class Meta:
         verbose_name = "Follow"
         verbose_name_plural = "Follows"
@@ -135,10 +155,14 @@ class Follow(MyBaseModel):
 
 
 class Mention(MyBaseModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="mentions", verbose_name="User")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                             on_delete=models.CASCADE, related_name="mentions", verbose_name="User")
     message = models.TextField(null=True, blank=True, verbose_name="Message")
-    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="mentions", verbose_name="Channel")
-    episode = models.ForeignKey(Episode, null=True, blank=True, on_delete=models.CASCADE, related_name="mentions", verbose_name="Episode")
+    channel = models.ForeignKey(Channel, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="mentions", verbose_name="Channel")
+    episode = models.ForeignKey(Episode, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="mentions", verbose_name="Episode")
+
     class Meta:
         verbose_name = "Mention"
         verbose_name_plural = "Mentions"
@@ -149,9 +173,13 @@ class Mention(MyBaseModel):
 
 
 class Playlist(MyBaseModel):
-    title = models.CharField(max_length=50, null=True, blank=True, verbose_name="Title")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="playlists", verbose_name="User")
-    episode = models.ManyToManyField(Episode, null=True, blank=True, related_name="playlists", verbose_name="Episodes")
+    title = models.CharField(max_length=50, null=True,
+                             blank=True, verbose_name="Title")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                             on_delete=models.CASCADE, related_name="playlists", verbose_name="User")
+    episode = models.ManyToManyField(
+        Episode, null=True, blank=True, related_name="playlists", verbose_name="Episodes")
+
     class Meta:
         verbose_name = "Playlist"
         verbose_name_plural = "Playlists"
@@ -162,14 +190,22 @@ class Playlist(MyBaseModel):
 
 
 class Profile(MyBaseModel):
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="profile", verbose_name="Owner")
-    channel = models.ManyToManyField(Channel, null=True, blank=True, related_name="profiles", verbose_name="Channels")
-    episode = models.ManyToManyField(Episode, null=True, blank=True, related_name="profiles", verbose_name="Episodes")
-    comment = models.ManyToManyField(Comment, null=True, blank=True, related_name="profiles", verbose_name="Comments")
-    like = models.ManyToManyField(Like, null=True, blank=True, related_name="profiles", verbose_name="Likes")
-    follow = models.ManyToManyField(Follow, null=True, blank=True, related_name="profiles", verbose_name="Follows")
-    mention = models.ManyToManyField(Mention, null=True, blank=True, related_name="profiles", verbose_name="Mentions")
-    playlist = models.ManyToManyField(Playlist, null=True, blank=True, related_name="profiles", verbose_name="Playlists")
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True,
+                                 on_delete=models.CASCADE, related_name="profile", verbose_name="Owner")
+    channel = models.ManyToManyField(
+        Channel, null=True, blank=True, related_name="profiles", verbose_name="Channels")
+    episode = models.ManyToManyField(
+        Episode, null=True, blank=True, related_name="profiles", verbose_name="Episodes")
+    comment = models.ManyToManyField(
+        Comment, null=True, blank=True, related_name="profiles", verbose_name="Comments")
+    like = models.ManyToManyField(
+        Like, null=True, blank=True, related_name="profiles", verbose_name="Likes")
+    follow = models.ManyToManyField(
+        Follow, null=True, blank=True, related_name="profiles", verbose_name="Follows")
+    mention = models.ManyToManyField(
+        Mention, null=True, blank=True, related_name="profiles", verbose_name="Mentions")
+    playlist = models.ManyToManyField(
+        Playlist, null=True, blank=True, related_name="profiles", verbose_name="Playlists")
 
     class Meta:
         verbose_name = "Profile"
@@ -199,10 +235,14 @@ class Profile(MyBaseModel):
 
 
 class Log(MyBaseModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name="logs", verbose_name="User")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                             on_delete=models.CASCADE, related_name="logs", verbose_name="User")
     message = models.TextField(null=True, blank=True, verbose_name="Message")
-    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.CASCADE, related_name="logs", verbose_name="Channel")
-    episode = models.ForeignKey(Episode, null=True, blank=True, on_delete=models.CASCADE, related_name="logs", verbose_name="Episode")
+    channel = models.ForeignKey(Channel, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="logs", verbose_name="Channel")
+    episode = models.ForeignKey(Episode, null=True, blank=True,
+                                on_delete=models.CASCADE, related_name="logs", verbose_name="Episode")
+
     class Meta:
         verbose_name = "Log"
         verbose_name_plural = "Logs"
@@ -210,4 +250,3 @@ class Log(MyBaseModel):
 
     def __str__(self):
         return str(self.id)
-

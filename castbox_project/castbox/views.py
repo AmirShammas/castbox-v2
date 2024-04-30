@@ -24,7 +24,7 @@ def superuser_required(view_func):
 def profile_owner_required_1(view_func):
     def decorated_view_func(request, *args, **kwargs):
         profile = get_object_or_404(Profile, pk=kwargs['pk'])
-        if not request.user==profile.owner:
+        if not request.user == profile.owner:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -35,7 +35,7 @@ def profile_owner_required_2(view_func):
     def decorated_view_func(request, *args, **kwargs):
         profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
         channel = get_object_or_404(Channel, pk=kwargs['pk'])
-        if not request.user==profile.owner or not request.user==channel.owner:
+        if not request.user == profile.owner or not request.user == channel.owner:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -45,12 +45,11 @@ def profile_owner_required_2(view_func):
 def profile_owner_required_3(view_func):
     def decorated_view_func(request, *args, **kwargs):
         profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        if not request.user==profile.owner:
+        if not request.user == profile.owner:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
     return decorated_view_func
-
 
 
 def profile_owner_required_4(view_func):
@@ -58,7 +57,7 @@ def profile_owner_required_4(view_func):
         profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
         channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
         comment = get_object_or_404(Comment, pk=kwargs['pk'])
-        if not request.user==profile.owner or not comment.channel==channel or not request.user==comment.author:
+        if not request.user == profile.owner or not comment.channel == channel or not request.user == comment.author:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -69,7 +68,7 @@ def profile_owner_required_5(view_func):
     def decorated_view_func(request, *args, **kwargs):
         profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
         channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
-        if not request.user==profile.owner or not request.user==channel.owner:
+        if not request.user == profile.owner or not request.user == channel.owner:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -81,7 +80,7 @@ def profile_owner_required_6(view_func):
         profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
         channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
         episode = get_object_or_404(Episode, pk=kwargs['pk'])
-        if not request.user==profile.owner or not request.user==channel.owner or not request.user==episode.owner or not episode.channel==channel:
+        if not request.user == profile.owner or not request.user == channel.owner or not request.user == episode.owner or not episode.channel == channel:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -92,7 +91,7 @@ def profile_owner_required_7(view_func):
     def decorated_view_func(request, *args, **kwargs):
         profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
         playlist = get_object_or_404(Playlist, pk=kwargs['pk'])
-        if not request.user==profile.owner or not request.user==playlist.user:
+        if not request.user == profile.owner or not request.user == playlist.user:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -104,7 +103,7 @@ def profile_owner_required_8(view_func):
         profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
         playlist = get_object_or_404(Playlist, pk=kwargs['pk'])
         episode = get_object_or_404(Episode, pk=kwargs['episode_id'])
-        if not request.user==profile.owner or not request.user==playlist.user or not episode in playlist.episode.all():
+        if not request.user == profile.owner or not request.user == playlist.user or not episode in playlist.episode.all():
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -115,7 +114,7 @@ def channel_episode_required(view_func):
     def decorated_view_func(request, *args, **kwargs):
         channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
         episode = get_object_or_404(Episode, pk=kwargs['pk'])
-        if not episode.channel==channel:
+        if not episode.channel == channel:
             message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
             return HttpResponseForbidden(message)
         return view_func(request, *args, **kwargs)
@@ -140,7 +139,8 @@ class ChannelListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Channel.objects.all()
-    
+
+
 class ChannelDetailView(LoginRequiredMixin, DetailView):
     model = Channel
     context_object_name = "channel"
@@ -150,7 +150,8 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         channel = get_object_or_404(Channel, pk=self.kwargs['pk'])
         log_message = f"The user '{request.user}' watched the channel '{channel.title}' !!"
-        Log.objects.create(user=request.user, message=log_message, channel=channel)
+        Log.objects.create(user=request.user,
+                           message=log_message, channel=channel)
         return super().get(request, *args, **kwargs)
 
 
@@ -158,15 +159,15 @@ class ChannelFollowView(LoginRequiredMixin, View):
     def post(self, request, pk):
         channel = get_object_or_404(Channel, id=pk)
         user = request.user
-        
+
         if Follow.objects.filter(user=user, channel=channel).exists():
             return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
-        
+
         new_follow = Follow.objects.create(user=user, channel=channel)
 
         profile = Profile.objects.get(owner=self.request.user)
         profile.follow.add(new_follow)
-        
+
         return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
 
 
@@ -174,16 +175,17 @@ class ChannelUnfollowView(LoginRequiredMixin, View):
     def post(self, request, pk):
         channel = get_object_or_404(Channel, id=pk)
         user = request.user
-        
+
         if not Follow.objects.filter(user=user, channel=channel).exists():
             return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
-        
-        follow_to_delete = Follow.objects.filter(user=user, channel=channel).first()
+
+        follow_to_delete = Follow.objects.filter(
+            user=user, channel=channel).first()
         if follow_to_delete:
             follow_to_delete.delete()
             profile = Profile.objects.get(owner=self.request.user)
             profile.follow.remove(follow_to_delete)
-        
+
         return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
 
 
@@ -212,15 +214,16 @@ class EpisodeLikeView(LoginRequiredMixin, View):
         channel = get_object_or_404(Channel, id=channel_id)
         episode = get_object_or_404(Episode, id=pk)
         user = request.user
-        
+
         if Like.objects.filter(user=user, channel=channel, episode=episode).exists():
             return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
-        
-        new_like = Like.objects.create(user=user, channel=channel, episode=episode)
+
+        new_like = Like.objects.create(
+            user=user, channel=channel, episode=episode)
 
         profile = Profile.objects.get(owner=self.request.user)
         profile.like.add(new_like)
-        
+
         return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
 
 
@@ -230,16 +233,17 @@ class EpisodeUnlikeView(LoginRequiredMixin, View):
         channel = get_object_or_404(Channel, id=channel_id)
         episode = get_object_or_404(Episode, id=pk)
         user = request.user
-        
+
         if not Like.objects.filter(user=user, channel=channel, episode=episode).exists():
             return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
-        
-        like_to_delete = Like.objects.filter(user=user, channel=channel, episode=episode).first()
+
+        like_to_delete = Like.objects.filter(
+            user=user, channel=channel, episode=episode).first()
         if like_to_delete:
             like_to_delete.delete()
             profile = Profile.objects.get(owner=self.request.user)
             profile.like.remove(like_to_delete)
-        
+
         return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
 
 
@@ -261,7 +265,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         profile.comment.add(form.instance)
 
         return super().form_valid(form)
-    
+
     def get_success_url(self):
         channel_id = self.kwargs.get('channel_id')
         return reverse('channel_detail', kwargs={'pk': channel_id})
@@ -279,6 +283,7 @@ class ProfileChannelDetailView(LoginRequiredMixin, DetailView):
     model = Channel
     template_name = 'profiles/profile_channel_detail.html'
     context_object_name = 'channel'
+
 
 @method_decorator(profile_owner_required_3, name='dispatch')
 class ProfileChannelCreateView(LoginRequiredMixin, CreateView):
@@ -326,7 +331,7 @@ class ProfileChannelDeleteView(LoginRequiredMixin, DeleteView):
     model = Channel
     context_object_name = "channel"
     template_name = "profiles/profile_channel_delete.html"
-    
+
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         return reverse_lazy('profile', kwargs={'pk': profile_id})
@@ -363,7 +368,7 @@ class ProfileCommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
     context_object_name = "comment"
     template_name = "profiles/profile_comment_delete.html"
-    
+
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         return reverse_lazy('profile', kwargs={'pk': profile_id})
@@ -388,7 +393,7 @@ class ProfileEpisodeCreateView(LoginRequiredMixin, CreateView):
         profile.episode.add(form.instance)
 
         return super().form_valid(form)
-    
+
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         channel_id = self.kwargs.get('channel_id')
@@ -409,13 +414,13 @@ class ProfileEpisodeUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "profiles/profile_episode_edit.html"
     fields = ["title", "description"]
     login_url = "login"
-    
+
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         channel_id = self.kwargs.get('channel_id')
         episode_id = self.kwargs.get('pk')
         return reverse_lazy('profile_episode_detail', kwargs={'profile_id': profile_id, 'channel_id': channel_id, 'pk': episode_id})
-    
+
     def form_valid(self, form):
         form.instance.owner = self.request.user
         form.save()
@@ -427,7 +432,7 @@ class ProfileEpisodeDeleteView(LoginRequiredMixin, DeleteView):
     model = Episode
     context_object_name = "episode"
     template_name = "profiles/profile_episode_delete.html"
-    
+
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         channel_id = self.kwargs.get('channel_id')
@@ -487,7 +492,7 @@ class ProfilePlaylistDeleteView(LoginRequiredMixin, DeleteView):
     model = Playlist
     context_object_name = "playlist"
     template_name = "profiles/profile_playlist_delete.html"
-    
+
     def get_success_url(self):
         profile_id = self.kwargs.get('profile_id')
         return reverse_lazy('profile', kwargs={'pk': profile_id})
@@ -513,7 +518,8 @@ class SelectPlaylistForm(LoginRequiredMixin, forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super(SelectPlaylistForm, self).__init__(*args, **kwargs)
-        self.fields['playlist'].choices = [(playlist.id, playlist.title) for playlist in user.playlists.all()]
+        self.fields['playlist'].choices = [
+            (playlist.id, playlist.title) for playlist in user.playlists.all()]
 
 
 @method_decorator(channel_episode_required, name='dispatch')
@@ -552,7 +558,8 @@ class EpisodePlayView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         episode = get_object_or_404(Episode, pk=self.kwargs['pk'])
         log_message = f"The user '{request.user}' played the episode '{episode.title}' !!"
-        Log.objects.create(user=request.user, message=log_message, channel=episode.channel, episode=episode)
+        Log.objects.create(user=request.user, message=log_message,
+                           channel=episode.channel, episode=episode)
         return super().get(request, *args, **kwargs)
 
 
@@ -565,4 +572,3 @@ class LogListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Log.objects.all()
-

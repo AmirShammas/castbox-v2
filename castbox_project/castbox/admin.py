@@ -6,9 +6,13 @@ from .models import Channel, Comment, Episode, Follow, Like, Log, Mention, Playl
 
 
 CustomUser = get_user_model()
+
+
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ("id", "username", "email", "is_superuser",)
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
 
 
@@ -50,7 +54,8 @@ class FollowAdmin(admin.ModelAdmin):
 
 @register(Mention)
 class MentionAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "channel", "episode", "message", "is_active",)
+    list_display = ("id", "user", "channel",
+                    "episode", "message", "is_active",)
     list_editable = ("is_active",)
 
 
@@ -62,6 +67,6 @@ class PlaylistAdmin(admin.ModelAdmin):
 
 @register(Log)
 class LogAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "channel", "episode", "message", "is_active",)
+    list_display = ("id", "user", "channel",
+                    "episode", "message", "is_active",)
     list_editable = ("is_active",)
-
