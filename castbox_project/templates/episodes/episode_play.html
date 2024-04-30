@@ -5,7 +5,7 @@
 {% endblock title %}
 
 {% block content %}
-    <h3><a href="">Back</a> to channel-detail page !!</h3>
+    <h3><a href="{% url 'episode_detail' episode.channel.id episode.pk %}">Back</a> to channel-detail page !!</h3>
     <hr/>
         <h2>The episode "{{ episode.title }}" is playing now !!</h2>
 {% endblock content %}

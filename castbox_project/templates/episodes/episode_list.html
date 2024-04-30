@@ -7,7 +7,7 @@
 {% block content %}
     {% for episode in episode_list %}
         <div>
-            <h2><a href="">{{ episode.id }}</a> => {{ episode.title }} => {{ episode.description }} => {{ episode.owner }} => {{ episode.channel }}</h2>
+            <h2><a href="{% url 'episode_detail' episode.channel.id episode.pk %}">{{ episode.id }}</a> => {{ episode.title }} => {{ episode.description }} => {{ episode.owner }} => {{ episode.channel }}</h2>
             <hr/>
         </div>
     {% endfor %}
