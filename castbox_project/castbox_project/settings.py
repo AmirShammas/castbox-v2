@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "follow.apps.FollowConfig",
     "episode.apps.EpisodeConfig",
     "like.apps.LikeConfig",
+    "log.apps.LogConfig",
 ]
 
 MIDDLEWARE = [

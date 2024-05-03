@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LogListView, ProfileCommentDeleteView, ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ProfileChannelDeleteView, ProfileChannelUpdateView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
+from .views import ProfileCommentDeleteView, ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ProfileChannelDeleteView, ProfileChannelUpdateView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
 
 
 urlpatterns = [
@@ -40,5 +40,4 @@ urlpatterns = [
          ProfilePlaylistDeleteView.as_view(), name="profile_playlist_delete"),
     path("profile/<int:profile_id>/playlist/<int:pk>/episode/<int:episode_id>/delete/",
          ProfilePlaylistEpisodeDeleteView.as_view(), name="profile_playlist_episode_delete"),
-    path("log/", LogListView.as_view(), name="log_list"),
 ]

@@ -5,14 +5,14 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, View, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Episode, Like, Log, Playlist, Profile
+from .models import Episode, Playlist, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from channel.models import Channel
 from comment.models import Comment
-from permissions.permissions import superuser_required, channel_episode_required, profile_owner_required_1, profile_owner_required_2, profile_owner_required_3, profile_owner_required_4, profile_owner_required_5, profile_owner_required_6, profile_owner_required_7, profile_owner_required_8
+from permissions.permissions import channel_episode_required, profile_owner_required_1, profile_owner_required_2, profile_owner_required_3, profile_owner_required_4, profile_owner_required_5, profile_owner_required_6, profile_owner_required_7, profile_owner_required_8
 
 
 class SignupPageView(generic.CreateView):
@@ -302,13 +302,3 @@ class EpisodeSelectPlaylistView(LoginRequiredMixin, FormView):
     def get_success_url(self):
         return reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']})
 
-
-@method_decorator(superuser_required, name='dispatch')
-class LogListView(LoginRequiredMixin, ListView):
-    model = Log
-    context_object_name = "log_list"
-    template_name = "logs/log_list.html"
-    login_url = "login"
-
-    def get_queryset(self):
-        return Log.objects.all()

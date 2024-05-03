@@ -5,7 +5,7 @@ from .models import Episode
 from django.views.generic import ListView, DetailView
 from django.utils.decorators import method_decorator
 from permissions.permissions import channel_episode_required
-from castbox.models import Log
+from log.models import Log
 
 
 class EpisodeListView(LoginRequiredMixin, ListView):

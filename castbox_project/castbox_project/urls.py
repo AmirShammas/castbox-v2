@@ -10,4 +10,5 @@ urlpatterns = [
     path("", include("follow.urls")),
     path("", include("episode.urls")),
     path("", include("like.urls")),
+    path("", include("log.urls")),
 ]
