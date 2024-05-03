@@ -1,5 +1,5 @@
 from django import forms
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -12,115 +12,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from channel.models import Channel
 from comment.models import Comment
-
-
-def superuser_required(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        if not request.user.is_superuser:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_1(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['pk'])
-        if not request.user == profile.owner:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_2(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        channel = get_object_or_404(Channel, pk=kwargs['pk'])
-        if not request.user == profile.owner or not request.user == channel.owner:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_3(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        if not request.user == profile.owner:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_4(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
-        comment = get_object_or_404(Comment, pk=kwargs['pk'])
-        if not request.user == profile.owner or not comment.channel == channel or not request.user == comment.author:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_5(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
-        if not request.user == profile.owner or not request.user == channel.owner:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_6(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
-        episode = get_object_or_404(Episode, pk=kwargs['pk'])
-        if not request.user == profile.owner or not request.user == channel.owner or not request.user == episode.owner or not episode.channel == channel:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_7(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        playlist = get_object_or_404(Playlist, pk=kwargs['pk'])
-        if not request.user == profile.owner or not request.user == playlist.user:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def profile_owner_required_8(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs['profile_id'])
-        playlist = get_object_or_404(Playlist, pk=kwargs['pk'])
-        episode = get_object_or_404(Episode, pk=kwargs['episode_id'])
-        if not request.user == profile.owner or not request.user == playlist.user or not episode in playlist.episode.all():
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
-
-
-def channel_episode_required(view_func):
-    def decorated_view_func(request, *args, **kwargs):
-        channel = get_object_or_404(Channel, pk=kwargs['channel_id'])
-        episode = get_object_or_404(Episode, pk=kwargs['pk'])
-        if not episode.channel == channel:
-            message = "<h1>Access Denied !! Back to <a href='/'>Home</a> page !!</h1>"
-            return HttpResponseForbidden(message)
-        return view_func(request, *args, **kwargs)
-    return decorated_view_func
+from permissions.permissions import superuser_required, channel_episode_required, profile_owner_required_1, profile_owner_required_2, profile_owner_required_3, profile_owner_required_4, profile_owner_required_5, profile_owner_required_6, profile_owner_required_7, profile_owner_required_8
 
 
 class SignupPageView(generic.CreateView):
@@ -131,25 +23,6 @@ class SignupPageView(generic.CreateView):
 
 class HomePageView(TemplateView):
     template_name = "home.html"
-
-
-class EpisodeListView(LoginRequiredMixin, ListView):
-    model = Episode
-    context_object_name = "episode_list"
-    template_name = "episodes/episode_list.html"
-    login_url = "login"
-
-    def get_queryset(self):
-        channel_id = self.kwargs.get('channel_id')
-        channel = get_object_or_404(Channel, id=channel_id)
-        return Episode.objects.filter(channel=channel)
-
-
-@method_decorator(channel_episode_required, name='dispatch')
-class EpisodeDetailView(LoginRequiredMixin, DetailView):
-    model = Episode
-    template_name = 'episodes/episode_detail.html'
-    context_object_name = 'episode'
 
 
 @method_decorator(channel_episode_required, name='dispatch')
@@ -467,20 +340,6 @@ class EpisodeSelectPlaylistView(LoginRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']})
-
-
-@method_decorator(channel_episode_required, name='dispatch')
-class EpisodePlayView(LoginRequiredMixin, DetailView):
-    model = Episode
-    template_name = 'episodes/episode_play.html'
-    context_object_name = 'episode'
-
-    def get(self, request, *args, **kwargs):
-        episode = get_object_or_404(Episode, pk=self.kwargs['pk'])
-        log_message = f"The user '{request.user}' played the episode '{episode.title}' !!"
-        Log.objects.create(user=request.user, message=log_message,
-                           channel=episode.channel, episode=episode)
-        return super().get(request, *args, **kwargs)
 
 
 @method_decorator(superuser_required, name='dispatch')

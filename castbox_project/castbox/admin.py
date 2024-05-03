@@ -16,12 +16,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 
 
-@register(Episode)
-class EpisodeAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "owner", "channel", "is_active",)
-    list_editable = ("is_active",)
-
-
 @register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("id", "owner", "is_active",)

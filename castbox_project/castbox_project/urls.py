@@ -8,4 +8,5 @@ urlpatterns = [
     path("", include("channel.urls")),
     path("", include("comment.urls")),
     path("", include("follow.urls")),
+    path("", include("episode.urls")),
 ]

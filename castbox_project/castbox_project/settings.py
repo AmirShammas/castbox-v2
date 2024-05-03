@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "channel.apps.ChannelConfig",
     "comment.apps.CommentConfig",
     "follow.apps.FollowConfig",
+    "episode.apps.EpisodeConfig",
 ]
 
 MIDDLEWARE = [

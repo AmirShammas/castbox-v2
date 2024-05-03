@@ -7,6 +7,7 @@ from utils.base_model import MyBaseModel
 from channel.models import Channel
 from comment.models import Comment
 from follow.models import Follow
+from episode.models import Episode
 
 
 class CustomUser(AbstractUser):
@@ -29,25 +30,6 @@ def create_default_playlist(sender, instance, created, **kwargs):
             user=instance, title="default-playlist")
         profile = Profile.objects.get(owner=instance)
         profile.playlist.add(new_playlist)
-
-
-class Episode(MyBaseModel):
-    title = models.CharField(max_length=50, null=True,
-                             blank=True, verbose_name="Title")
-    description = models.TextField(
-        null=True, blank=True, verbose_name="Description")
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
-                              on_delete=models.CASCADE, related_name="episodes", verbose_name="Owner")
-    channel = models.ForeignKey(Channel, null=True, blank=True,
-                                on_delete=models.CASCADE, related_name="episodes", verbose_name="Channel")
-
-    class Meta:
-        verbose_name = "Episode"
-        verbose_name_plural = "Episodes"
-        ordering = ("id",)
-
-    def __str__(self):
-        return self.title
 
 
 @receiver(post_save, sender=Episode)
