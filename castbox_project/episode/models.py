@@ -3,6 +3,7 @@ from django.conf import settings
 from utils.base_model import MyBaseModel
 from channel.models import Channel
 from django.db.models.signals import post_save
+from signals.signals import create_episode_mention
 
 
 class Episode(MyBaseModel):
@@ -23,3 +24,5 @@ class Episode(MyBaseModel):
     def __str__(self):
         return self.title
 
+
+post_save.connect(create_episode_mention, sender=Episode)

@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db.models.signals import post_save
-from django.dispatch import receiver
 from utils.base_model import MyBaseModel
 from channel.models import Channel
 from comment.models import Comment
@@ -10,6 +9,7 @@ from follow.models import Follow
 from episode.models import Episode
 from like.models import Like
 from mention.models import Mention
+from signals.signals import create_user_profile, create_default_playlist
 
 
 class CustomUser(AbstractUser):
@@ -19,29 +19,9 @@ class CustomUser(AbstractUser):
         ordering = ("id",)
 
 
-@receiver(post_save, sender=CustomUser)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(owner=instance)
+post_save.connect(create_user_profile, sender=CustomUser)
 
-
-@receiver(post_save, sender=CustomUser)
-def create_default_playlist(sender, instance, created, **kwargs):
-    if created:
-        new_playlist = Playlist.objects.create(
-            user=instance, title="default-playlist")
-        profile = Profile.objects.get(owner=instance)
-        profile.playlist.add(new_playlist)
-
-
-@receiver(post_save, sender=Episode)
-def create_episode_mention(sender, instance, created, **kwargs):
-    if created:
-        for follow in instance.channel.follows.all():
-            new_mention = Mention.objects.create(
-                user=follow.user, message=f"A new episode '{instance.title}' created in channel '{instance.channel.title}' !!", channel=instance.channel, episode=instance)
-            profile = Profile.objects.get(owner=follow.user)
-            profile.mention.add(new_mention)
+post_save.connect(create_default_playlist, sender=CustomUser)
 
 
 class Playlist(MyBaseModel):
