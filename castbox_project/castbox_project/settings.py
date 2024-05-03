@@ -18,6 +18,7 @@ INSTALLED_APPS = [
 
     # MyApps
     "castbox.apps.CastboxConfig",
+    "channel.apps.ChannelConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from abc import abstractmethod
 from django.conf import settings
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from utils.base_model import MyBaseModel
+from channel.models import Channel
 
 
 class CustomUser(AbstractUser):
@@ -27,48 +28,6 @@ def create_default_playlist(sender, instance, created, **kwargs):
             user=instance, title="default-playlist")
         profile = Profile.objects.get(owner=instance)
         profile.playlist.add(new_playlist)
-
-
-class MyBaseModel(models.Model):
-    is_active = models.BooleanField(
-        default=False,
-        verbose_name="Is Active",
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Created At",
-    )
-
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Updated At",
-    )
-
-    class Meta:
-        abstract = True
-        ordering = ("pk",)
-
-    @abstractmethod
-    def __str__(self):
-        raise NotImplementedError("Implement __str__ method")
-
-
-class Channel(MyBaseModel):
-    title = models.CharField(max_length=50, null=True,
-                             blank=True, verbose_name="Title")
-    description = models.TextField(
-        null=True, blank=True, verbose_name="Description")
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
-                              on_delete=models.CASCADE, related_name="channels", verbose_name="Owner")
-
-    class Meta:
-        verbose_name = "Channel"
-        verbose_name_plural = "Channels"
-        ordering = ("id",)
-
-    def __str__(self):
-        return self.title
 
 
 class Episode(MyBaseModel):
