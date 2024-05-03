@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, View, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import CustomUser, Episode, Follow, Like, Log, Playlist, Profile
+from .models import Episode, Like, Log, Playlist, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
@@ -131,40 +131,6 @@ class SignupPageView(generic.CreateView):
 
 class HomePageView(TemplateView):
     template_name = "home.html"
-
-
-class ChannelFollowView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        channel = get_object_or_404(Channel, id=pk)
-        user = request.user
-
-        if Follow.objects.filter(user=user, channel=channel).exists():
-            return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
-
-        new_follow = Follow.objects.create(user=user, channel=channel)
-
-        profile = Profile.objects.get(owner=self.request.user)
-        profile.follow.add(new_follow)
-
-        return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
-
-
-class ChannelUnfollowView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        channel = get_object_or_404(Channel, id=pk)
-        user = request.user
-
-        if not Follow.objects.filter(user=user, channel=channel).exists():
-            return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
-
-        follow_to_delete = Follow.objects.filter(
-            user=user, channel=channel).first()
-        if follow_to_delete:
-            follow_to_delete.delete()
-            profile = Profile.objects.get(owner=self.request.user)
-            profile.follow.remove(follow_to_delete)
-
-        return HttpResponseRedirect(reverse('channel_detail', kwargs={'pk': pk}))
 
 
 class EpisodeListView(LoginRequiredMixin, ListView):

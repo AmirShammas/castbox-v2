@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "castbox.apps.CastboxConfig",
     "channel.apps.ChannelConfig",
     "comment.apps.CommentConfig",
+    "follow.apps.FollowConfig",
 ]
 
 MIDDLEWARE = [

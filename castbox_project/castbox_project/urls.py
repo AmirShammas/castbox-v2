@@ -7,4 +7,5 @@ urlpatterns = [
     path("", include("castbox.urls")),
     path("", include("channel.urls")),
     path("", include("comment.urls")),
+    path("", include("follow.urls")),
 ]

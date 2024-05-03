@@ -34,12 +34,6 @@ class LikeAdmin(admin.ModelAdmin):
     list_editable = ("is_active",)
 
 
-@register(Follow)
-class FollowAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "channel", "is_active",)
-    list_editable = ("is_active",)
-
-
 @register(Mention)
 class MentionAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "channel",
