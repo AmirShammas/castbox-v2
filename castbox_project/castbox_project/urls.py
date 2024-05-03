@@ -11,5 +11,5 @@ urlpatterns = [
     path("", include("episode.urls")),
     path("", include("like.urls")),
     path("", include("log.urls")),
-    # path("", include("mention.urls")),
+    path("", include("playlist.urls")),
 ]

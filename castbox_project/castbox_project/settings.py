@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "like.apps.LikeConfig",
     "log.apps.LogConfig",
     "mention.apps.MentionConfig",
+    "playlist.apps.PlaylistConfig",
 ]
 
 MIDDLEWARE = [

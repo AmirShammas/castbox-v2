@@ -20,9 +20,3 @@ admin.site.register(CustomUser, CustomUserAdmin)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("id", "owner", "is_active",)
     list_editable = ("is_active",)
-
-
-@register(Playlist)
-class PlaylistAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "user", "is_active",)
-    list_editable = ("is_active",)

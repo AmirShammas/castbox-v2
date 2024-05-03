@@ -1,18 +1,17 @@
-from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic import TemplateView, ListView, DetailView, View, FormView
+from django.views.generic import TemplateView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Episode, Playlist, Profile
-from .forms import CustomUserCreationForm
+from forms.forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from channel.models import Channel
 from comment.models import Comment
-from permissions.permissions import channel_episode_required, profile_owner_required_1, profile_owner_required_2, profile_owner_required_3, profile_owner_required_4, profile_owner_required_5, profile_owner_required_6, profile_owner_required_7, profile_owner_required_8
+from permissions.permissions import profile_owner_required_1, profile_owner_required_2, profile_owner_required_3, profile_owner_required_4, profile_owner_required_5, profile_owner_required_6, profile_owner_required_7, profile_owner_required_8
 
 
 class SignupPageView(generic.CreateView):
@@ -265,40 +264,4 @@ class ProfilePlaylistEpisodeDeleteView(LoginRequiredMixin, View):
         playlist.episode.remove(episode)
         return HttpResponseRedirect(reverse('profile_playlist_detail', args=[profile_id, pk]))
 
-
-class SelectPlaylistForm(LoginRequiredMixin, forms.Form):
-    playlist = forms.ChoiceField(choices=[])
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
-        super(SelectPlaylistForm, self).__init__(*args, **kwargs)
-        self.fields['playlist'].choices = [
-            (playlist.id, playlist.title) for playlist in user.playlists.all()]
-
-
-@method_decorator(channel_episode_required, name='dispatch')
-class EpisodeSelectPlaylistView(LoginRequiredMixin, FormView):
-    template_name = 'episodes/episode_select_playlist.html'
-    form_class = SelectPlaylistForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        playlist_id = form.cleaned_data['playlist']
-        episode_id = self.kwargs['pk']
-        playlist = Playlist.objects.get(pk=playlist_id)
-        episode = Episode.objects.get(pk=episode_id)
-
-        if episode in playlist.episode.all():
-            return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']}))
-
-        playlist.episode.add(episode)
-
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('episode_detail', kwargs={'channel_id': self.kwargs['channel_id'], 'pk': self.kwargs['pk']})
 
