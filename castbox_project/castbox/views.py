@@ -25,45 +25,6 @@ class HomePageView(TemplateView):
     template_name = "home.html"
 
 
-@method_decorator(channel_episode_required, name='dispatch')
-class EpisodeLikeView(LoginRequiredMixin, View):
-    def post(self, request, channel_id, pk):
-        channel = get_object_or_404(Channel, id=channel_id)
-        episode = get_object_or_404(Episode, id=pk)
-        user = request.user
-
-        if Like.objects.filter(user=user, channel=channel, episode=episode).exists():
-            return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
-
-        new_like = Like.objects.create(
-            user=user, channel=channel, episode=episode)
-
-        profile = Profile.objects.get(owner=self.request.user)
-        profile.like.add(new_like)
-
-        return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
-
-
-@method_decorator(channel_episode_required, name='dispatch')
-class EpisodeUnlikeView(LoginRequiredMixin, View):
-    def post(self, request, channel_id, pk):
-        channel = get_object_or_404(Channel, id=channel_id)
-        episode = get_object_or_404(Episode, id=pk)
-        user = request.user
-
-        if not Like.objects.filter(user=user, channel=channel, episode=episode).exists():
-            return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
-
-        like_to_delete = Like.objects.filter(
-            user=user, channel=channel, episode=episode).first()
-        if like_to_delete:
-            like_to_delete.delete()
-            profile = Profile.objects.get(owner=self.request.user)
-            profile.like.remove(like_to_delete)
-
-        return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
-
-
 @method_decorator(profile_owner_required_1, name='dispatch')
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile

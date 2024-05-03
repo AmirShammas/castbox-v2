@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "comment.apps.CommentConfig",
     "follow.apps.FollowConfig",
     "episode.apps.EpisodeConfig",
+    "like.apps.LikeConfig",
 ]
 
 MIDDLEWARE = [

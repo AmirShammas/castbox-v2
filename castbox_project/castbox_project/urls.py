@@ -9,4 +9,5 @@ urlpatterns = [
     path("", include("comment.urls")),
     path("", include("follow.urls")),
     path("", include("episode.urls")),
+    path("", include("like.urls")),
 ]
