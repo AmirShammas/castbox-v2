@@ -1,11 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from utils.base_model import MyBaseModel
 from channel.models import Channel
+from comment.models import Comment
 
 
 class CustomUser(AbstractUser):
@@ -57,28 +57,6 @@ def create_episode_mention(sender, instance, created, **kwargs):
                 user=follow.user, message=f"A new episode '{instance.title}' created in channel '{instance.channel.title}' !!", channel=instance.channel, episode=instance)
             profile = Profile.objects.get(owner=follow.user)
             profile.mention.add(new_mention)
-
-
-class Comment(MyBaseModel):
-    title = models.CharField(max_length=50, null=True,
-                             blank=True, verbose_name="Title")
-    description = models.TextField(
-        null=True, blank=True, verbose_name="Description")
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
-                               on_delete=models.CASCADE, related_name="comments", verbose_name="Author")
-    channel = models.ForeignKey(Channel, null=True, blank=True,
-                                on_delete=models.CASCADE, related_name="comments", verbose_name="Channel")
-
-    class Meta:
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
-        ordering = ("id",)
-
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse("channel_list")
 
 
 class Like(MyBaseModel):

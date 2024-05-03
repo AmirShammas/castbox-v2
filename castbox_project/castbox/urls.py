@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EpisodePlayView, LogListView, ProfileCommentDeleteView, ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ProfileChannelDeleteView, ProfileChannelUpdateView, CommentCreateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
+from .views import EpisodePlayView, LogListView, ProfileCommentDeleteView, ProfileCommentUpdateView, ProfileCommentDetailView, ProfilePlaylistEpisodeDeleteView, EpisodeSelectPlaylistView, ProfilePlaylistDeleteView, ProfilePlaylistUpdateView, ProfilePlaylistDetailView, ProfilePlaylistCreateView, ChannelUnfollowView, ChannelFollowView, EpisodeUnlikeView, EpisodeLikeView, EpisodeDetailView, ProfileEpisodeDeleteView, ProfileEpisodeUpdateView, ProfileEpisodeDetailView, ProfileEpisodeCreateView, ProfileChannelCreateView, ProfileChannelDeleteView, ProfileChannelUpdateView, EpisodeListView, ProfileChannelDetailView, ProfileDetailView, SignupPageView, HomePageView
 
 
 urlpatterns = [
@@ -11,8 +11,6 @@ urlpatterns = [
          ChannelUnfollowView.as_view(), name="channel_unfollow"),
     path("channel/<int:channel_id>/episode/",
          EpisodeListView.as_view(), name="episode_list"),
-    path("channel/<int:channel_id>/comment/",
-         CommentCreateView.as_view(), name="comment_new"),
     path("channel/<int:channel_id>/episode/<int:pk>/",
          EpisodeDetailView.as_view(), name="episode_detail"),
     path("channel/<int:channel_id>/episode/<int:pk>/play/",

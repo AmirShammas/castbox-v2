@@ -5,11 +5,13 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, View, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Channel, CustomUser, Episode, Comment, Follow, Like, Log, Playlist, Profile
+from .models import CustomUser, Episode, Follow, Like, Log, Playlist, Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from channel.models import Channel
+from comment.models import Comment
 
 
 def superuser_required(view_func):
@@ -221,30 +223,6 @@ class EpisodeUnlikeView(LoginRequiredMixin, View):
             profile.like.remove(like_to_delete)
 
         return HttpResponseRedirect(reverse('episode_detail', kwargs={'channel_id': channel_id, 'pk': pk}))
-
-
-class CommentCreateView(LoginRequiredMixin, CreateView):
-    model = Comment
-    context_object_name = "comment"
-    template_name = "comments/comment_new.html"
-    fields = ["title", "description"]
-    login_url = "login"
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        channel_id = self.kwargs.get('channel_id')
-        channel = get_object_or_404(Channel, id=channel_id)
-        form.instance.channel = channel
-        form.save()
-
-        profile = Profile.objects.get(owner=self.request.user)
-        profile.comment.add(form.instance)
-
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        channel_id = self.kwargs.get('channel_id')
-        return reverse('channel_detail', kwargs={'pk': channel_id})
 
 
 @method_decorator(profile_owner_required_1, name='dispatch')
