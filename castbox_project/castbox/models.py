@@ -9,6 +9,7 @@ from comment.models import Comment
 from follow.models import Follow
 from episode.models import Episode
 from like.models import Like
+from mention.models import Mention
 
 
 class CustomUser(AbstractUser):
@@ -41,24 +42,6 @@ def create_episode_mention(sender, instance, created, **kwargs):
                 user=follow.user, message=f"A new episode '{instance.title}' created in channel '{instance.channel.title}' !!", channel=instance.channel, episode=instance)
             profile = Profile.objects.get(owner=follow.user)
             profile.mention.add(new_mention)
-
-
-class Mention(MyBaseModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
-                             on_delete=models.CASCADE, related_name="mentions", verbose_name="User")
-    message = models.TextField(null=True, blank=True, verbose_name="Message")
-    channel = models.ForeignKey(Channel, null=True, blank=True,
-                                on_delete=models.CASCADE, related_name="mentions", verbose_name="Channel")
-    episode = models.ForeignKey(Episode, null=True, blank=True,
-                                on_delete=models.CASCADE, related_name="mentions", verbose_name="Episode")
-
-    class Meta:
-        verbose_name = "Mention"
-        verbose_name_plural = "Mentions"
-        ordering = ("id",)
-
-    def __str__(self):
-        return str(self.id)
 
 
 class Playlist(MyBaseModel):

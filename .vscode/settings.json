@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "cast-conn",
+            "database": "${workspaceFolder:castbox-v2}/castbox_project/db.sqlite3"
+        }
+    ]
+}

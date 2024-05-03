@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "episode.apps.EpisodeConfig",
     "like.apps.LikeConfig",
     "log.apps.LogConfig",
+    "mention.apps.MentionConfig",
 ]
 
 MIDDLEWARE = [
