@@ -52,6 +52,7 @@ When the user wathes a channel's detail page or plays an episode, a log message 
 
 ## TODO
 
+- [x] make the project modular
 - [ ] complete admin panel
 - [ ] upload audio file in episode
 - [ ] upload user photo in profile

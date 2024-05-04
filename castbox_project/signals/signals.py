@@ -1,6 +1,6 @@
 def create_episode_mention(sender, instance, created, **kwargs):
     from mention.models import Mention
-    from castbox.models import Profile
+    from profilee.models import Profile
     if created:
         for follow in instance.channel.follows.all():
             new_mention = Mention.objects.create(
@@ -10,13 +10,14 @@ def create_episode_mention(sender, instance, created, **kwargs):
 
 
 def create_user_profile(sender, instance, created, **kwargs):
-    from castbox.models import Profile
+    from profilee.models import Profile
     if created:
         Profile.objects.create(owner=instance)
 
 
 def create_default_playlist(sender, instance, created, **kwargs):
-    from castbox.models import Profile, Playlist
+    from playlist.models import Playlist
+    from profilee.models import Profile
     if created:
         new_playlist = Playlist.objects.create(
             user=instance, title="default-playlist")
