@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "log.apps.LogConfig",
     "mention.apps.MentionConfig",
     "playlist.apps.PlaylistConfig",
+    "profilee.apps.ProfileeConfig",
 ]
 
 MIDDLEWARE = [

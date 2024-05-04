@@ -3,7 +3,8 @@ from django.http import HttpResponseForbidden
 from channel.models import Channel
 from episode.models import Episode
 from comment.models import Comment
-from castbox.models import Profile, Playlist
+from playlist.models import Playlist
+from profilee.models import Profile
 
 
 def superuser_required(view_func):

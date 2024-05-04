@@ -12,4 +12,5 @@ urlpatterns = [
     path("", include("like.urls")),
     path("", include("log.urls")),
     path("", include("playlist.urls")),
+    path("", include("profilee.urls")),
 ]

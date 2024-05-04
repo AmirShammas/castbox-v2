@@ -8,7 +8,7 @@ from .models import Like
 from django.views.generic import View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from castbox.models import Profile
+from profilee.models import Profile
 
 
 @method_decorator(channel_episode_required, name='dispatch')

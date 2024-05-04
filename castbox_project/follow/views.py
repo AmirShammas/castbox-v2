@@ -1,5 +1,5 @@
 from .models import Follow
-from castbox.models import Profile
+from profilee.models import Profile
 from channel.models import Channel
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
